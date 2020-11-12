@@ -9,14 +9,14 @@ class MangaHandler {
 	}
 
 	getConnector(id: string): Connector | undefined {
-		let rightConnector;
-		this.connectors.forEach((connector) => {
+		for (let i = 0; i < this.connectors.length; i++) {
+			const connector = this.connectors[i];
 			if (connector.id == id) {
-				rightConnector = connector;
+				return connector;
 			}
-		});
+		}
 
-		return rightConnector;
+		return undefined;
 	}
 }
 

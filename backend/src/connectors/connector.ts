@@ -1,39 +1,14 @@
+import Manga from "./manga";
+import Chapter, { ChapterProps } from "./chapter";
+
 export interface ConnectorProperties {
 	name: string;
 	id: string;
 
 	baseUrl: string;
-	
+
 	mangaPageUrl?: string;
 	pageModifier?: string;
-}
-
-export interface MangaProperties {
-	title: string;
-	id: string;
-	genre: string | string[];
-
-	genreSeparator: string;
-}
-
-export abstract class Manga {
-	title: string;
-	id: string;
-	genres: string[];
-
-	constructor(props: MangaProperties) {
-		this.title = props.title.trim();
-		this.id = props.id.trim();
-
-		if (typeof props.genre == "string") {
-			const genres = props.genre
-				.split(props.genreSeparator)
-				.map((g) => g.trim());
-			this.genres = genres;
-		} else {
-			this.genres = props.genre;
-		}
-	}
 }
 
 export default abstract class Connector {
@@ -56,4 +31,10 @@ export default abstract class Connector {
 	}
 
 	abstract async getMangaList(): Promise<Manga[]>;
+
+	abstract async getManga(mangaId: string): Promise<Manga | undefined>;
+
+	abstract async getChapters(
+		mangaId: string
+	): Promise<ChapterProps[] | undefined>;
 }
