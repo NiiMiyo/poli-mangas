@@ -2,11 +2,15 @@ import Connector from "../connectors/connector";
 
 import mangayabu from "../connectors/mangayabu/mangayabu";
 
-class ConnectionHandler {
+export class ConnectionHandler {
 	private connectors: Connector[];
 
 	constructor(...connectors: Connector[]) {
 		this.connectors = connectors;
+	}
+
+	get connectorList(): Connector[] {
+		return this.connectors;
 	}
 
 	getConnector(id: string): Connector | undefined {
