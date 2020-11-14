@@ -1,34 +1,28 @@
-import Chapter, { ChapterProperties } from "./chapter";
+import Chapter from "./chapter";
 
 export interface MangaProperties {
 	title: string;
 	id: string;
-	genre: string | string[];
+	cover: string;
 
-	genreSeparator: string;
+	genres: string[];
 }
 
 export default abstract class Manga {
 	title: string;
 	id: string;
-	genres: string[];
-
+	cover: string;
 	connector: string;
+
+	genres: string[];
 
 	constructor(props: MangaProperties, connector: string) {
 		this.title = props.title.trim();
 		this.id = props.id.trim();
-
+		this.cover = props.cover;
 		this.connector = connector;
 
-		if (typeof props.genre == "string") {
-			const genres = props.genre
-				.split(props.genreSeparator)
-				.map((g) => g.trim());
-			this.genres = genres;
-		} else {
-			this.genres = props.genre;
-		}
+		this.genres = props.genres;
 	}
 
 	abstract async getChapterList(): Promise<Chapter[]>;

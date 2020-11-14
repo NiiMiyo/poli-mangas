@@ -1,7 +1,3 @@
-import { writeFileSync } from "fs";
-import fetch from "node-fetch";
-import { join } from "path";
-
 import { loadEnv } from "../../generics";
 import { ConnectorProperties } from "../connector";
 

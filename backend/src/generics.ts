@@ -31,3 +31,21 @@ export async function fetchDom(url: string) {
 	const dom = new JSDOM(text);
 	return dom;
 }
+
+export function multipleAnd(...comparators: any[]): boolean {
+	for (let i = 0; i < comparators.length; i++) {
+		const b = Boolean(comparators[i]);
+		if (!b) return false;
+	}
+
+	return true;
+}
+
+export function filterStringArray(strings: string[]): string[] {
+	const return_ = strings.filter((s) => {
+		const isEmpty = [null, undefined, ""].includes(s);
+
+		return !isEmpty;
+	});
+	return return_;
+}

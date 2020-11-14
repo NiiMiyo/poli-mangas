@@ -1,5 +1,4 @@
 import Connector, { ConnectorProperties } from "../connector";
-import path from "path";
 
 import { fetchDom, fetchJson, loadEnv } from "../../generics";
 import Manga from "../manga";
@@ -24,7 +23,11 @@ class MangaYabuConnector extends Connector {
 	async getMangaList(): Promise<MangaYabuManga[]> {
 		const response = (await fetchJson(API_URL)) as MangaYabuApiResponse[];
 
-		const mangas = response.map((manga) => {
+		let mangasApi = response.filter((m) => {
+			return m.slug != "null";
+		});
+
+		const mangas = mangasApi.map((manga) => {
 			manga.cover = this.baseUrl + manga.cover;
 			return new MangaYabuManga(manga);
 		});
@@ -39,9 +42,7 @@ class MangaYabuConnector extends Connector {
 
 		const indexOf = mangasIds.indexOf(mangaId);
 
-		if (indexOf < 0) {
-			return undefined;
-		}
+		if (indexOf < 0) return undefined;
 
 		return mangas[indexOf];
 	}
@@ -51,9 +52,7 @@ class MangaYabuConnector extends Connector {
 	): Promise<MangaYabuChapter[] | undefined> {
 		const manga = await this.getManga(mangaId);
 
-		if (!manga) {
-			return undefined;
-		}
+		if (manga === undefined) return undefined;
 
 		const chaptersApi = await manga.getChapterList();
 
@@ -65,12 +64,20 @@ class MangaYabuConnector extends Connector {
 
 class MangaYabuManga extends Manga {
 	constructor(mangaProps: MangaYabuApiResponse) {
+		const genreSeparator = /[,.]+/;
+		let genre = mangaProps.genre.split(genreSeparator);
+
+		genre = genre.map((g) => g.trim());
+		genre = genre.filter((g) => {
+			return g !== "null";
+		});
+
 		super(
 			{
 				title: mangaProps.title,
 				id: mangaProps.slug,
-				genre: mangaProps.genre,
-				genreSeparator: ",",
+				genres: genre,
+				cover: mangaProps.cover,
 			},
 			mangayabuProps.id
 		);

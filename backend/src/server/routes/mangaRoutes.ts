@@ -21,7 +21,7 @@ routes.get(
 
 		const mangas = await service.getMangaList(connectorId);
 
-		if (!mangas) return connectorNotFound(response);
+		if (mangas === undefined) return connectorNotFound(response);
 
 		return response.status(200).json(mangas);
 	}
@@ -32,11 +32,11 @@ routes.get(
 	async (request, response) => {
 		const { connectorId, mangaId } = request.params;
 
-		const chapters = await service.getChapterList(connectorId, mangaId);
+		const manga = await service.getManga(connectorId, mangaId);
 
-		if (!chapters) return mangaNotFound(response);
+		if (manga === undefined) return mangaNotFound(response);
 
-		return response.status(200).json(chapters);
+		return response.status(200).json(manga);
 	}
 );
 
@@ -51,7 +51,7 @@ routes.get(
 			chapterId
 		);
 
-		if (!pages) return chapterNotFound(response);
+		if (pages === undefined) return chapterNotFound(response);
 
 		return response.status(200).json(pages);
 	}

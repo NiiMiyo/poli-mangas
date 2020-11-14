@@ -1,0 +1,14 @@
+{
+	"overrides": [
+		{
+			"files": "*.py",
+			"options": {
+				"tabWidth": 4,
+				"useTabs": true
+			}
+		}
+	],
+	"tabWidth": 4,
+	"useTabs": true,
+	"bracketSpacing": true
+}

@@ -1,27 +1,27 @@
 import Manga from "../../connectors/manga";
 
+export type MangaView = {
+	id: string;
+	title: string;
+	cover: string;
+	connector: string;
+	genres: string[];
+};
+
 export default {
-	render(manga: Manga) {
-		const { connector, id, genres: genreList, title } = manga;
-
-		const genres = genreList.filter((g) => {
-			const empty: any[] = [null, undefined];
-
-			if (empty.includes(g)) return false;
-			if (g.trim() === "") return false;
-
-			return true;
-		});
+	render(manga: Manga): MangaView {
+		const { connector, id, genres, title, cover } = manga;
 
 		return {
 			id,
 			title,
+			cover,
 			connector,
 			genres,
 		};
 	},
 
 	renderMany(mangas: Manga[]) {
-		return mangas.map(this.render);
+		return Promise.all(mangas.map(this.render));
 	},
 };
