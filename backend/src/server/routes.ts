@@ -1,6 +1,6 @@
 import { Router, Response } from "express";
 
-import handler from "./mangaHandler";
+import connectionHandler from "./mangaHandler";
 
 const routes = Router();
 
@@ -32,9 +32,7 @@ function chapterNotFound(response: Response): Response {
 routes.get("/:id/", async (request, response) => {
 	const { id } = request.params;
 
-	console.log(`Connecting to \`${id}\``);
-
-	const connector = handler.getConnector(id);
+	const connector = connectionHandler.getConnector(id);
 
 	if (!connector) {
 		return connectorNotFound(response);
@@ -49,9 +47,7 @@ routes.get("/:id/", async (request, response) => {
 routes.get("/:connectorId/:manga", async (request, response) => {
 	const { connectorId, manga } = request.params;
 
-	console.log(`Connecting to \`${connectorId}/${manga}\``);
-
-	const connector = handler.getConnector(connectorId);
+	const connector = connectionHandler.getConnector(connectorId);
 
 	if (!connector) {
 		return connectorNotFound(response);
@@ -69,9 +65,7 @@ routes.get("/:connectorId/:manga", async (request, response) => {
 routes.get("/:connectorId/:mangaId/:chapterId", async (request, response) => {
 	const { connectorId, mangaId, chapterId } = request.params;
 
-	console.log(`Connecting to \`${connectorId}/${mangaId}/${chapterId}\``);
-
-	const connector = handler.getConnector(connectorId);
+	const connector = connectionHandler.getConnector(connectorId);
 
 	if (!connector) {
 		return connectorNotFound(response);
@@ -89,7 +83,16 @@ routes.get("/:connectorId/:mangaId/:chapterId", async (request, response) => {
 		return chapterNotFound(response);
 	}
 
-	const images = await chapter.getChapterImages();
+	let images = await chapter.getChapterImages();
+
+	images = images.filter((link) => {
+		const empty: any[] = [null, undefined];
+
+		if (empty.includes(link)) return false;
+		if (link.trim() === "") return false;
+
+		return true;
+	});
 
 	return response.status(200).json(images);
 });

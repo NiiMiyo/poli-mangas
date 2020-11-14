@@ -1,4 +1,4 @@
-export interface ChapterProps {
+export interface ChapterProperties {
 	id: string | number;
 	link: string;
 
@@ -11,7 +11,7 @@ export default abstract class Chapter {
 
 	title?: string;
 
-	constructor(props: ChapterProps) {
+	constructor(props: ChapterProperties) {
 		this.id = props.id.toString();
 		this.link = props.link;
 		this.title = props.title;

@@ -1,7 +1,8 @@
 import Connector from "../connectors/connector";
+
 import mangayabu from "../connectors/mangayabu/mangayabu";
 
-class MangaHandler {
+class ConnectionHandler {
 	private connectors: Connector[];
 
 	constructor(...connectors: Connector[]) {
@@ -20,6 +21,6 @@ class MangaHandler {
 	}
 }
 
-const handler = new MangaHandler(mangayabu);
+const handler = new ConnectionHandler(mangayabu);
 
 export default handler;

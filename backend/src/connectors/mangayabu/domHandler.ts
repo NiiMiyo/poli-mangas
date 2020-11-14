@@ -1,19 +1,14 @@
-// import { Chapter } from "../manga";
-
 const chapterPrefix = "Capítulo #";
 
 export function DomToChapterResponse(dom: Element): MangaYabuChapterResponse {
-	//div a "Capítulo #XXX"
 	const a = dom.getElementsByTagName("a")[0];
 
 	let chapterId = a.innerHTML;
 	chapterId = chapterId.slice(chapterPrefix.length);
 
-	const chapterLink = a.href;
-
 	const chapter: MangaYabuChapterResponse = {
 		id: chapterId,
-		link: chapterLink,
+		link: a.href,
 	};
 
 	return chapter;

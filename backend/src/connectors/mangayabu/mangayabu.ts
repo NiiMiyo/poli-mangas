@@ -13,7 +13,7 @@ const mangayabuProps: ConnectorProperties = {
 	name: "MangaYabu!",
 	id: "mangayabu",
 
-	baseUrl: "https://mangayabu.top",
+	baseUrl: "https://mangayabu.top/",
 };
 
 class MangaYabuConnector extends Connector {
@@ -21,14 +21,12 @@ class MangaYabuConnector extends Connector {
 		super(connectorProps);
 	}
 
-	async getMangaList() {
-		const body = (await fetchJson(API_URL)) as MangaYabuApiResponse[];
+	async getMangaList(): Promise<MangaYabuManga[]> {
+		const response = (await fetchJson(API_URL)) as MangaYabuApiResponse[];
 
-		const mangas: MangaYabuManga[] = [];
-
-		body.forEach((manga) => {
-			manga.cover = path.join(this.baseUrl, manga.cover);
-			mangas.push(new MangaYabuManga(manga));
+		const mangas = response.map((manga) => {
+			manga.cover = this.baseUrl + manga.cover;
+			return new MangaYabuManga(manga);
 		});
 
 		return mangas;
@@ -45,21 +43,21 @@ class MangaYabuConnector extends Connector {
 			return undefined;
 		}
 
-		const manga = mangas[indexOf];
-
-		return manga;
+		return mangas[indexOf];
 	}
 
 	async getChapters(
 		mangaId: string
-	): Promise<MangaYabuChapterResponse[] | undefined> {
+	): Promise<MangaYabuChapter[] | undefined> {
 		const manga = await this.getManga(mangaId);
 
 		if (!manga) {
 			return undefined;
 		}
 
-		const chapters = await manga.getChapterList();
+		const chaptersApi = await manga.getChapterList();
+
+		const chapters = chaptersApi.map((cap) => new MangaYabuChapter(cap));
 
 		return chapters;
 	}
@@ -78,17 +76,19 @@ class MangaYabuManga extends Manga {
 		);
 	}
 
-	async getChapterList(): Promise<MangaYabuChapterResponse[]> {
+	async getChapterList(): Promise<MangaYabuChapter[]> {
 		const mangaPageUrl = MANGA_PAGE + this.id;
 
 		const dom = (await fetchDom(mangaPageUrl)).window.document;
 		const chaptersDom = dom.getElementsByClassName("single-chapter");
 
-		const chapters: MangaYabuChapterResponse[] = [];
+		const chapters: MangaYabuChapter[] = [];
 
 		for (let i = 0; i < chaptersDom.length; i++) {
 			const element = chaptersDom[i];
-			chapters.push(DomToChapterResponse(element));
+			const api = DomToChapterResponse(element);
+
+			chapters.push(new MangaYabuChapter(api));
 		}
 
 		return chapters;
@@ -96,11 +96,12 @@ class MangaYabuManga extends Manga {
 
 	async getChapter(chapterId: string): Promise<MangaYabuChapter | undefined> {
 		const chapters = await this.getChapterList();
+
 		for (let i = 0; i < chapters.length; i++) {
 			const cap = chapters[i];
+
 			if (cap.id == chapterId) {
-				const chapter = new MangaYabuChapter(cap);
-				return chapter;
+				return new MangaYabuChapter(cap);
 			}
 		}
 		return undefined;
@@ -114,9 +115,17 @@ class MangaYabuChapter extends Chapter {
 
 	async getChapterImages(): Promise<string[]> {
 		const dom = (await fetchDom(this.link)).window.document;
-		const pagesDom = dom.getElementsByClassName("manga-pages")[0];
 
-		const pages: string[] = DomToChapterImages(pagesDom);
+		const pagesDom = dom.getElementsByClassName("manga-pages");
+
+		let pages: string[] = [];
+
+		for (let i = 0; i < pagesDom.length; i++) {
+			const page = pagesDom[i];
+			const pageImages = DomToChapterImages(page);
+
+			pages = pages.concat(pageImages);
+		}
 
 		return pages;
 	}

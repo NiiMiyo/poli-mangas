@@ -1,5 +1,5 @@
 import Manga from "./manga";
-import Chapter, { ChapterProps } from "./chapter";
+import Chapter from "./chapter";
 
 export interface ConnectorProperties {
 	name: string;
@@ -34,7 +34,5 @@ export default abstract class Connector {
 
 	abstract async getManga(mangaId: string): Promise<Manga | undefined>;
 
-	abstract async getChapters(
-		mangaId: string
-	): Promise<ChapterProps[] | undefined>;
+	abstract async getChapters(mangaId: string): Promise<Chapter[] | undefined>;
 }
