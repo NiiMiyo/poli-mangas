@@ -3,6 +3,7 @@ import { multipleAnd } from "../generics";
 import Connector from "../connectors/connector";
 
 import mangayabu from "../connectors/mangayabu/mangayabu";
+import unionmangas from "../connectors/unionmangas/unionmangas";
 
 import Manga from "../connectors/manga";
 import Chapter from "../connectors/chapter";
@@ -143,6 +144,6 @@ export class ConnectionHandler {
 	}
 }
 
-const handler = new ConnectionHandler(mangayabu);
+const handler = new ConnectionHandler(mangayabu, unionmangas);
 
 export default handler;

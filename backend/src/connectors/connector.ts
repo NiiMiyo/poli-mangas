@@ -6,9 +6,6 @@ export interface ConnectorProperties {
 	id: string;
 
 	baseUrl: string;
-
-	mangaPageUrl?: string;
-	pageModifier?: string;
 }
 
 export default abstract class Connector {
@@ -25,9 +22,6 @@ export default abstract class Connector {
 		this.id = props.id;
 
 		this.baseUrl = props.baseUrl;
-		this.mangalistUrl = props.mangaPageUrl;
-
-		this.pageModifier = props.pageModifier;
 	}
 
 	abstract async getMangaList(): Promise<Manga[]>;

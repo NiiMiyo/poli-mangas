@@ -49,3 +49,36 @@ export function filterStringArray(strings: string[]): string[] {
 	});
 	return return_;
 }
+
+export function range(
+	initial: number,
+	final: number,
+	step: number = 1
+): number[] {
+	initial = Math.floor(initial);
+	final = Math.ceil(final);
+
+	const range: number[] = [];
+
+	const isCrescent = initial < final;
+
+	const compareFunction = isCrescent
+		? (num1: number, num2: number) => {
+				return num1 <= num2;
+		  }
+		: (num1: number, num2: number) => {
+				return num2 <= num1;
+		  };
+
+	const startPoint = isCrescent ? initial : final;
+	const stopPoint = isCrescent ? final : initial;
+	let value = startPoint;
+
+	while (compareFunction(value, stopPoint)) {
+		range.push(value);
+
+		value += isCrescent ? Math.abs(step) : -Math.abs(step);
+	}
+
+	return range;
+}

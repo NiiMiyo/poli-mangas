@@ -19,7 +19,7 @@
 	"name": "backend",
 	"scripts": {
 		"start": "ts-node-dev --transpile-only --ignore-watch node_modules index.ts",
-		"prettier": "./node_modules/.bin/prettier ./* --check --ignore-unknown --config ./.prettierrc"
+		"prettier": "./node_modules/.bin/prettier ./* -c -u --config ./.prettierrc"
 	},
 	"version": "1.0.0"
 }
