@@ -6,9 +6,13 @@ export function DomToChapterResponse(dom: Element): MangaYabuChapterResponse {
 	let chapterId = a.innerHTML;
 	chapterId = chapterId.slice(chapterPrefix.length);
 
+	const title = chapterId;
+
 	const chapter: MangaYabuChapterResponse = {
 		id: chapterId,
 		link: a.href,
+
+		title,
 	};
 
 	return chapter;

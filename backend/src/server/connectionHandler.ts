@@ -10,7 +10,6 @@ import Chapter from "../connectors/chapter";
 
 import MangaViews from "./views/MangaViews";
 import ChapterViews from "./views/ChapterViews";
-import { Z_UNKNOWN } from "zlib";
 
 export class ConnectionHandler {
 	private connectors: Connector[];

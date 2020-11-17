@@ -11,4 +11,5 @@ interface MangaYabuApiResponse {
 interface MangaYabuChapterResponse {
 	id: string;
 	link: string;
+	title: string;
 }

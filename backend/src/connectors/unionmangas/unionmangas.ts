@@ -1,7 +1,8 @@
-import { fetchJson, loadEnv, range } from "../../generics";
-import Chapter, { ChapterProperties } from "../chapter";
 import Connector, { ConnectorProperties } from "../connector";
 import Manga, { MangaProperties } from "../manga";
+import Chapter, { ChapterProperties } from "../chapter";
+
+import { fetchJson, loadEnv, range } from "../../generics";
 
 const {
 	API_URL,
@@ -23,22 +24,22 @@ class UnionMangasConnector extends Connector {
 	}
 
 	async getMangaList(): Promise<UnionMangasManga[]> {
-		let mangas: UnionMangasManga[] = [];
 		const apiResponse = await fetchJson(API_URL);
 
-		const mangasApi: UnionMangasMangaApiResponse[] = apiResponse.lsDocument;
+		const mangasApi = apiResponse.lsDocument as UnionMangasMangaApiResponse[];
 		const recode: number = apiResponse.totalRecode;
 
-		const totalPages = range(
-			mangasApi.length,
-			recode / mangasApi.length + 2
-		);
+		const mangas = mangasApi.map((m) => new UnionMangasManga(m));
+
+		const startPage = 2;
+		const endPage = recode / mangasApi.length + 2;
+
+		const totalPages = range(startPage, endPage);
 
 		await Promise.all(
 			totalPages.map(async (p) => {
-				const pageMangas: UnionMangasMangaApiResponse[] = (
-					await fetchJson(API_URL + p)
-				).lsDocument;
+				const pageMangas = (await fetchJson(API_URL + p))
+					.lsDocument as UnionMangasMangaApiResponse[];
 
 				pageMangas.forEach((m) => {
 					mangas.push(new UnionMangasManga(m));
@@ -108,6 +109,8 @@ class UnionMangasChapter extends Chapter {
 		const convertedProps: ChapterProperties = {
 			id: props.id,
 			link: unionmangasProps.baseUrl + "view-" + props.id,
+
+			title: props.nameSeo,
 		};
 		super(convertedProps);
 	}
