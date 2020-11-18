@@ -90,9 +90,7 @@ class UnionMangasManga extends Manga {
 		return apiResponse.map((c) => new UnionMangasChapter(c));
 	}
 
-	async getChapter(
-		chapterId: string
-	): Promise<UnionMangasChapter | undefined> {
+	async getChapter(chapterId: string): Promise<UnionMangasChapter | undefined> {
 		const chapters = await this.getChapterList();
 		const chaptersIds = chapters.map((c) => c.id);
 

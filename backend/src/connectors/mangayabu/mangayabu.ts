@@ -47,9 +47,7 @@ class MangaYabuConnector extends Connector {
 		return mangas[indexOf];
 	}
 
-	async getChapters(
-		mangaId: string
-	): Promise<MangaYabuChapter[] | undefined> {
+	async getChapters(mangaId: string): Promise<MangaYabuChapter[] | undefined> {
 		const manga = await this.getManga(mangaId);
 
 		if (manga === undefined) return undefined;

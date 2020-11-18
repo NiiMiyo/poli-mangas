@@ -17,5 +17,5 @@ export default abstract class Chapter {
 		this.title = props.title;
 	}
 
-	async abstract getChapterImages(): Promise<string[]>;
+	abstract async getChapterImages(): Promise<string[]>;
 }

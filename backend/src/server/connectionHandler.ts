@@ -39,10 +39,7 @@ export class ConnectionHandler {
 		return Boolean(connector);
 	}
 
-	async validateManga(
-		connectorId: string,
-		mangaId: string
-	): Promise<boolean> {
+	async validateManga(connectorId: string, mangaId: string): Promise<boolean> {
 		const connector = this.getConnector(connectorId);
 		const manga = await connector?.getManga(mangaId);
 
