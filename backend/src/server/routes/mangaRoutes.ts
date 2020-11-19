@@ -74,4 +74,17 @@ routes.get(
 	}
 );
 
+routes.get("/search", async (request, response) => {
+	const searchQuery = request.query.q as string;
+	// const limit = Number(request.query.limit as string) || Infinity;
+
+	try {
+		const mangas = await service.searchManga(searchQuery);
+
+		return response.status(200).json(mangas);
+	} catch (err) {
+		return internalError(response);
+	}
+});
+
 export default routes;

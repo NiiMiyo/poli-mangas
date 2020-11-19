@@ -1,7 +1,14 @@
+import {
+	filterStringArray,
+	multipleOr,
+	removeAccents,
+	unarray,
+} from "../generics";
+
 import connectionHandler, { ConnectionHandler } from "./connectionHandler";
-import { filterStringArray } from "../generics";
 
 import Connector from "../connectors/connector";
+import Manga from "../connectors/manga";
 
 import ConnectorViews from "./views/ConnectorViews";
 import { MangaView } from "./views/MangaViews";
@@ -17,6 +24,26 @@ function filterMangaGenres(manga: MangaView): MangaView {
 		connector,
 		genres,
 	};
+}
+
+function filterSearchManga(searchTerm: string, manga: Manga): boolean {
+	const id = removeAccents(manga.id.toLowerCase());
+	const title = removeAccents(manga.title.toLowerCase());
+	const genres = manga.genres.map((g) => removeAccents(g.toLowerCase()));
+
+	let inGenres = false;
+	for (let i = 0; i < genres.length; i++) {
+		if (genres[i].includes(searchTerm)) {
+			inGenres = true;
+			break;
+		}
+	}
+
+	return multipleOr(
+		id.includes(searchTerm),
+		title.includes(searchTerm),
+		inGenres
+	);
 }
 
 class ConnectionService {
@@ -73,6 +100,20 @@ class ConnectionService {
 		if (pages === undefined) return undefined;
 
 		return filterStringArray(pages);
+	}
+
+	async searchManga(searchTerm: string): Promise<Manga[]> {
+		const connectors = this.handler.connectorList;
+		const connectorsMangas = await Promise.all(
+			connectors.map((c) => c.getMangaList())
+		);
+		const mangas = unarray(connectorsMangas);
+
+		let filteredMangas = mangas.filter((m) => {
+			return filterSearchManga(searchTerm, m);
+		});
+
+		return filteredMangas;
 	}
 }
 

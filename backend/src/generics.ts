@@ -41,6 +41,14 @@ export function multipleAnd(...comparators: any[]): boolean {
 	return true;
 }
 
+export function multipleOr(...comparators: any[]): boolean {
+	for (let i = 0; i < comparators.length; i++) {
+		const b = Boolean(comparators[i]);
+		if (b) return true;
+	}
+	return false;
+}
+
 export function filterStringArray(strings: string[]): string[] {
 	const return_ = strings.filter((s) => {
 		const isEmpty = [null, undefined, ""].includes(s);
@@ -58,7 +66,7 @@ export function range(
 	initial = Math.floor(initial);
 	final = Math.ceil(final);
 
-	const range: number[] = [];
+	const rangeArray: number[] = [];
 
 	const isCrescent = initial < final;
 
@@ -75,10 +83,46 @@ export function range(
 	let value = startPoint;
 
 	while (compareFunction(value, stopPoint)) {
-		range.push(value);
+		rangeArray.push(value);
 
 		value += isCrescent ? Math.abs(step) : -Math.abs(step);
 	}
 
-	return range;
+	return rangeArray;
+}
+
+export function unarray<T>(array: T[][]): T[] {
+	let onelevelArray: T[] = [];
+
+	array.forEach((t) => {
+		onelevelArray = onelevelArray.concat(t);
+	});
+
+	return onelevelArray;
+}
+
+export function removeAccents(q: string): string {
+	console.log(q);
+
+	const letterMap = new Map<RegExp, string>();
+	letterMap.set(RegExp("[àáãâä]"), "a");
+	letterMap.set(RegExp("[èéêä]"), "e");
+	letterMap.set(RegExp("[ìíîï]"), "i");
+	letterMap.set(RegExp("[òóôõö]"), "o");
+	letterMap.set(RegExp("[úùûü]"), "u");
+
+	letterMap.set(RegExp("ñ"), "n");
+	letterMap.set(RegExp("š"), "s");
+	letterMap.set(RegExp("ç"), "c");
+	letterMap.set(RegExp("[ýÿ]"), "y");
+	letterMap.set(RegExp("ž"), "z");
+
+	const noAccentArray = [];
+	letterMap.forEach((value, key) => {
+		q = q.replace(key, value);
+	});
+
+	console.log("No accents: ", q);
+
+	return q;
 }
