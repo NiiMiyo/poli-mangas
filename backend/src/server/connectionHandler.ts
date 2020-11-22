@@ -8,8 +8,8 @@ import unionmangas from "../connectors/unionmangas/unionmangas";
 import Manga from "../connectors/manga";
 import Chapter from "../connectors/chapter";
 
-import MangaViews from "./views/MangaViews";
-import ChapterViews from "./views/ChapterViews";
+import MangaViews from "../views/MangaViews";
+import ChapterViews from "../views/ChapterViews";
 
 export class ConnectionHandler {
 	private connectors: Connector[];

@@ -1,4 +1,4 @@
-import Manga from "../../connectors/manga";
+import Manga from "../connectors/manga";
 
 export type MangaView = {
 	id: string;

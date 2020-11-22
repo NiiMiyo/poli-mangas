@@ -1,4 +1,4 @@
-import Chapter from "../../connectors/chapter";
+import Chapter from "../connectors/chapter";
 
 export default {
 	render(chapter: Chapter) {

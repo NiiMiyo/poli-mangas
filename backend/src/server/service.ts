@@ -10,8 +10,8 @@ import connectionHandler, { ConnectionHandler } from "./connectionHandler";
 import Connector from "../connectors/connector";
 import Manga from "../connectors/manga";
 
-import ConnectorViews from "./views/ConnectorViews";
-import { MangaView } from "./views/MangaViews";
+import ConnectorViews from "../views/ConnectorViews";
+import { MangaView } from "../views/MangaViews";
 
 function filterMangaGenres(manga: MangaView): MangaView {
 	const { id, title, connector, cover } = manga;

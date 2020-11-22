@@ -102,27 +102,23 @@ export function unarray<T>(array: T[][]): T[] {
 }
 
 export function removeAccents(q: string): string {
-	console.log(q);
+	const letterMap = new Map<RegExp, string>([
+		[RegExp("[àáãâä]"), "a"],
+		[RegExp("[èéêä]"), "e"],
+		[RegExp("[ìíîï]"), "i"],
+		[RegExp("[òóôõö]"), "o"],
+		[RegExp("[úùûü]"), "u"],
 
-	const letterMap = new Map<RegExp, string>();
-	letterMap.set(RegExp("[àáãâä]"), "a");
-	letterMap.set(RegExp("[èéêä]"), "e");
-	letterMap.set(RegExp("[ìíîï]"), "i");
-	letterMap.set(RegExp("[òóôõö]"), "o");
-	letterMap.set(RegExp("[úùûü]"), "u");
+		[RegExp("[ñ]"), "n"],
+		[RegExp("[š]"), "s"],
+		[RegExp("[ç]"), "c"],
+		[RegExp("[ýÿ]"), "y"],
+		[RegExp("[ž]"), "z"],
+	]);
 
-	letterMap.set(RegExp("ñ"), "n");
-	letterMap.set(RegExp("š"), "s");
-	letterMap.set(RegExp("ç"), "c");
-	letterMap.set(RegExp("[ýÿ]"), "y");
-	letterMap.set(RegExp("ž"), "z");
-
-	const noAccentArray = [];
 	letterMap.forEach((value, key) => {
 		q = q.replace(key, value);
 	});
-
-	console.log("No accents: ", q);
 
 	return q;
 }

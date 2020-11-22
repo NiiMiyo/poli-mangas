@@ -1,4 +1,4 @@
-import Connector from "../../connectors/connector";
+import Connector from "../connectors/connector";
 
 export default {
 	render(connector: Connector) {
