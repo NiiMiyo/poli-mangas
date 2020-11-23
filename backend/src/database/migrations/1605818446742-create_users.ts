@@ -32,6 +32,11 @@ export class createUsers1605818446742 implements MigrationInterface {
 						isNullable: false,
 						isGenerated: false,
 					},
+					{
+						name: "profile_picture",
+						type: "text",
+						isGenerated: false,
+					},
 				],
 			})
 		);

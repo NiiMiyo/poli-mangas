@@ -1,85 +1,36 @@
 import { Router } from "express";
 
-import service from "../service";
+import ConnectorsController from "../../controllers/connectors";
+import MangasController from "../../controllers/mangas";
+import ChaptersController from "../../controllers/chapters";
 
-import {
-	connectorNotFound,
-	mangaNotFound,
-	chapterNotFound,
-	internalError,
-} from "./responses";
+import connectionService from "../service";
+
+import { internalError } from "./responses";
 
 const routes = Router();
 
 const mangaConnectionPrefix = "/connect";
 
-routes.get(mangaConnectionPrefix, async (request, response) => {
-	const connectors = service.getConnectorList();
+routes.get(mangaConnectionPrefix, ConnectorsController.show);
 
-	return response.status(200).json(connectors);
-});
-
-routes.get(
-	mangaConnectionPrefix + "/:connectorId/",
-	async (request, response) => {
-		const { connectorId } = request.params;
-
-		try {
-			const mangas = await service.getMangaList(connectorId);
-
-			if (mangas === undefined) return connectorNotFound(response);
-
-			return response.status(200).json(mangas);
-		} catch (err) {
-			return internalError(response);
-		}
-	}
-);
+routes.get(mangaConnectionPrefix + "/:connectorId/", MangasController.show);
 
 routes.get(
 	mangaConnectionPrefix + "/:connectorId/:mangaId",
-	async (request, response) => {
-		const { connectorId, mangaId } = request.params;
-
-		try {
-			const manga = await service.getManga(connectorId, mangaId);
-
-			if (manga === undefined) return mangaNotFound(response);
-
-			return response.status(200).json(manga);
-		} catch (error) {
-			return internalError(response);
-		}
-	}
+	MangasController.index
 );
 
 routes.get(
 	mangaConnectionPrefix + "/:connectorId/:mangaId/:chapterId",
-	async (request, response) => {
-		const { connectorId, mangaId, chapterId } = request.params;
-
-		try {
-			const pages = await service.getChapterPages(
-				connectorId,
-				mangaId,
-				chapterId
-			);
-
-			if (pages === undefined) return chapterNotFound(response);
-
-			return response.status(200).json(pages);
-		} catch (error) {
-			return internalError(response);
-		}
-	}
+	ChaptersController.index
 );
 
 routes.get("/search", async (request, response) => {
 	const searchQuery = request.query.q as string;
-	// const limit = Number(request.query.limit as string) || Infinity;
 
 	try {
-		const mangas = await service.searchManga(searchQuery);
+		const mangas = await connectionService.searchManga(searchQuery);
 
 		return response.status(200).json(mangas);
 	} catch (err) {

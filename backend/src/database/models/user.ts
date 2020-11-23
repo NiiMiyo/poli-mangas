@@ -16,6 +16,9 @@ export default class User {
 	@Column()
 	library: string;
 
+	@Column()
+	profile_picture: string;
+
 	public get favorites(): Favorite[] {
 		return JSON.parse(this.library);
 	}

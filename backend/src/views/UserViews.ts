@@ -1,15 +1,21 @@
 import UserModel from "../database/models/user";
+import { loadEnv } from "../generics";
+
+const { PORT } = loadEnv(__dirname, "../../.env");
 
 export default {
 	render(user: UserModel) {
-		const { id, email, favorites: favArray } = user;
+		let { id, email, favorites: favArray, profile_picture } = user;
 
-		const favorites = favArray.map((f) => f.renderJson());
+		profile_picture = `http://localhost:${PORT}/uploads/profilePictures/${profile_picture}`;
+
+		const favorites = favArray.map((f) => f.render());
 
 		return {
 			id,
 			email,
 			favorites,
+			profile_picture,
 		};
 	},
 
