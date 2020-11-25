@@ -2,8 +2,14 @@ type UnionMangasMangaApiResponse = {
 	id: string;
 	name: string;
 	image: string;
+	description: string;
+	statusName: string;
+
+	listAuthors: AuthorApiResponse[];
 
 	listGenres: GenreApiResponse[];
+
+	listYear: YearApiResponse[];
 };
 
 type GenreApiResponse = {
@@ -24,4 +30,8 @@ type ChapterApiResponse = {
 	vol: null;
 	nameSeo: string;
 	image: null;
+};
+
+type YearApiResponse = {
+	name: string;
 };

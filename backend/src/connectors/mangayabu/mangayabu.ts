@@ -61,6 +61,8 @@ class MangaYabuConnector extends Connector {
 }
 
 class MangaYabuManga extends Manga {
+	url: string;
+
 	constructor(mangaProps: MangaYabuApiResponse) {
 		const genreSeparator = /[,.]+/;
 		let genre = mangaProps.genre.split(genreSeparator);
@@ -79,12 +81,11 @@ class MangaYabuManga extends Manga {
 			},
 			mangayabuProps.id
 		);
+		this.url = MANGA_PAGE + this.id;
 	}
 
 	async getChapterList(): Promise<MangaYabuChapter[]> {
-		const mangaPageUrl = MANGA_PAGE + this.id;
-
-		const dom = (await fetchDom(mangaPageUrl)).window.document;
+		const dom = (await fetchDom(this.url)).window.document;
 		const chaptersDom = dom.getElementsByClassName("single-chapter");
 
 		const chapters: MangaYabuChapter[] = [];
@@ -110,6 +111,37 @@ class MangaYabuManga extends Manga {
 			}
 		}
 		return undefined;
+	}
+
+	async getSynopsis(): Promise<string> {
+		const synopsisPrefix = " Sinopse";
+
+		const dom = (await fetchDom(this.url)).window.document;
+		const synopsisDiv = dom.getElementsByClassName("manga-synopsis")[0];
+		let text = synopsisDiv.textContent as string;
+		text = text.slice(synopsisPrefix.length);
+
+		return text.trim();
+	}
+
+	async getStatus(): Promise<string> {
+		const dom = (await fetchDom(this.url)).window.document;
+		const statusDiv = dom.getElementsByClassName("manga-status")[0];
+
+		const statusPrefix = "Status:";
+		let text = statusDiv.textContent as string;
+		text = text.slice(statusPrefix.length);
+		return text.trim();
+	}
+
+	async getAuthor(): Promise<string> {
+		// TODO: Encontrar o autor se possível
+		return "";
+	}
+
+	async getYear(): Promise<string> {
+		// TODO: Encontrar o ano se possível
+		return "";
 	}
 }
 

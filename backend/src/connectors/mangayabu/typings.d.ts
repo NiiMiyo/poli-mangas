@@ -1,4 +1,4 @@
-interface MangaYabuApiResponse {
+type MangaYabuApiResponse = {
 	hash: number;
 	title: string;
 	genre: string;
@@ -6,10 +6,10 @@ interface MangaYabuApiResponse {
 	cover: string;
 	type: string;
 	slug: string;
-}
+};
 
-interface MangaYabuChapterResponse {
+type MangaYabuChapterResponse = {
 	id: string;
 	link: string;
 	title: string;
-}
+};

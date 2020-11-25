@@ -1,4 +1,5 @@
-import Manga from "../../connectors/manga";
+import Manga from "../connectors/manga";
+import { filterStringArray } from "../generics";
 
 export type MangaView = {
 	id: string;
@@ -10,7 +11,9 @@ export type MangaView = {
 
 export default {
 	render(manga: Manga): MangaView {
-		const { connector, id, genres, title, cover } = manga;
+		let { connector, id, genres, title, cover } = manga;
+
+		genres = filterStringArray(genres);
 
 		return {
 			id,
@@ -22,6 +25,6 @@ export default {
 	},
 
 	renderMany(mangas: Manga[]) {
-		return Promise.all(mangas.map(this.render));
+		return mangas.map(this.render)
 	},
 };

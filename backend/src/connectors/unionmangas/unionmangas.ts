@@ -71,6 +71,11 @@ class UnionMangasConnector extends Connector {
 }
 
 class UnionMangasManga extends Manga {
+	description: string;
+	status: string;
+
+	url: string;
+
 	constructor(props: UnionMangasMangaApiResponse) {
 		const convertedProps: MangaProperties = {
 			id: props.id,
@@ -80,6 +85,10 @@ class UnionMangasManga extends Manga {
 		};
 
 		super(convertedProps, unionmangasProps.id);
+
+		this.description = props.description;
+		this.status = props.statusName;
+		this.url = MANGA_INFO_API_URL + this.id;
 	}
 
 	async getChapterList(): Promise<UnionMangasChapter[]> {
@@ -92,23 +101,57 @@ class UnionMangasManga extends Manga {
 
 	async getChapter(chapterId: string): Promise<UnionMangasChapter | undefined> {
 		const chapters = await this.getChapterList();
-		const chaptersIds = chapters.map((c) => c.id);
 
-		const chapterIndex = chaptersIds.indexOf(chapterId);
+		let chapterIndex = -1;
+
+		for (let i = 0; i < chapters.length; i++) {
+			const c = chapters[i];
+			if (c.id == chapterId) {
+				chapterIndex = i;
+				break;
+			}
+		}
 
 		if (chapterIndex < 0) return undefined;
 
 		return chapters[chapterIndex];
 	}
+
+	async getSynopsis(): Promise<string> {
+		return this.description;
+	}
+
+	async getStatus(): Promise<string> {
+		return this.status;
+	}
+
+	async getAuthor(): Promise<string> {
+		const res = (await fetchJson(this.url)) as UnionMangasMangaApiResponse;
+		const { listAuthors } = res;
+
+		const authors = listAuthors.map((a) => a.name.trim()).join(", ");
+		return authors;
+	}
+
+	async getYear(): Promise<string> {
+		const res = (await fetchJson(this.url)) as UnionMangasMangaApiResponse;
+		const { listYear } = res;
+
+		const year = listYear.map((y) => y.name.trim()).join(" - ");
+		return year;
+	}
 }
 
 class UnionMangasChapter extends Chapter {
 	constructor(props: ChapterApiResponse) {
+		const titlePrefix = "Capítulo #";
+		const title = props.name.slice(titlePrefix.length);
+
 		const convertedProps: ChapterProperties = {
 			id: props.id,
 			link: unionmangasProps.baseUrl + "view-" + props.id,
 
-			title: props.nameSeo,
+			title,
 		};
 		super(convertedProps);
 	}
