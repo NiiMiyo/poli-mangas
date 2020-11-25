@@ -29,13 +29,6 @@ export function chapterNotFound(response: Response): Response {
 	});
 }
 
-export function internalError(response: Response): Response {
-	return response.status(internalErrorCode).json({
-		message: "Internal Server Error",
-		statusCode: internalErrorCode,
-	});
-}
-
 export function userCreated(response: Response, user: UserModel): Response {
 	const res = response.status(createdCode).json({
 		message: "User created succesfully",

@@ -2,12 +2,11 @@ import Chapter from "../connectors/chapter";
 
 export default {
 	render(chapter: Chapter) {
-		const { id, link, title } = chapter;
+		const { id, title } = chapter;
 
 		return {
 			id,
 			title,
-			link,
 		};
 	},
 

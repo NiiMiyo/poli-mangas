@@ -34,9 +34,7 @@ export default {
 		const profile_picture = request.file;
 
 		const profilePicturePath =
-			profile_picture !== undefined
-				? profile_picture.filename
-				: "undefined";
+			profile_picture !== undefined ? profile_picture.filename : "undefined";
 
 		const userData = {
 			id,

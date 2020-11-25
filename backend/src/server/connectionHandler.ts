@@ -1,6 +1,7 @@
 import { multipleAnd } from "../generics";
 
 import Connector from "../connectors/connector";
+import ConnectorViews from "../views/ConnectorViews";
 
 import mangayabu from "../connectors/mangayabu/mangayabu";
 import unionmangas from "../connectors/unionmangas/unionmangas";
@@ -76,10 +77,27 @@ export class ConnectionHandler {
 
 		const manga = (await connector.getManga(mangaId)) as Manga;
 
-		const chapters = await manga.getChapterList();
+		const [synopsis, chapters, status, author, year] = await Promise.all([
+			manga.getSynopsis(),
+			manga.getChapterList(),
+			manga.getStatus(),
+			manga.getAuthor(),
+			manga.getYear(),
+		]);
+
+		const { id, cover, genres, title } = MangaViews.render(manga);
 
 		return {
-			data: MangaViews.render(manga),
+			id,
+			title,
+			cover,
+			synopsis,
+			genres,
+			status,
+			author,
+			year,
+			connector: ConnectorViews.render(connector),
+
 			chapters: ChapterViews.renderMany(chapters),
 		};
 	}

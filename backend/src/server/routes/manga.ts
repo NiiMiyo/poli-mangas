@@ -6,8 +6,6 @@ import ChaptersController from "../../controllers/chapters";
 
 import connectionService from "../service";
 
-import { internalError } from "./responses";
-
 const routes = Router();
 
 const mangaConnectionPrefix = "/connect";
@@ -26,16 +24,17 @@ routes.get(
 	ChaptersController.index
 );
 
+routes.get("/mangas", async (request, response) => {
+	const mangas = await connectionService.getMangaList();
+	return response.status(200).json(mangas);
+});
+
 routes.get("/search", async (request, response) => {
 	const searchQuery = request.query.q as string;
 
-	try {
-		const mangas = await connectionService.searchManga(searchQuery);
+	const mangas = await connectionService.searchManga(searchQuery);
 
-		return response.status(200).json(mangas);
-	} catch (err) {
-		return internalError(response);
-	}
+	return response.status(200).json(mangas);
 });
 
 export default routes;
