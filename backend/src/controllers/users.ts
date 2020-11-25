@@ -20,10 +20,15 @@ export default {
 		const { id } = request.params;
 
 		const userRepo = getRepository(UserModel);
-
-		const user = await userRepo.findOneOrFail(id);
-
-		return response.status(200).json(UserViews.render(user));
+		try {
+			const user = await userRepo.findOneOrFail(id);
+			return response.status(200).json(UserViews.render(user));
+		} catch (err) {
+			return response.status(404).json({
+				message: "User not found",
+				statusCode: 404,
+			});
+		}
 	},
 
 	async create(request: Request, response: Response) {
@@ -55,10 +60,32 @@ export default {
 			abortEarly: false,
 		});
 
+		const users = await userRepo.find();
+
+		let hasConflict = false;
+		const conflicts: string[] = [];
+
+		for (let i = 0; i < users.length; i++) {
+			const u = users[i];
+			if (u.id === id) {
+				hasConflict = true;
+				conflicts.push("Username already in use");
+			}
+			if (u.email === email) {
+				hasConflict = true;
+				conflicts.push("Email already registered");
+			}
+		}
+
+		if (hasConflict) {
+			return response.status(409).json({
+				conflicts,
+				statusCode: 409,
+			});
+		}
+
 		const user = userRepo.create(userData);
-
 		await userRepo.save(user);
-
 		return userCreated(response, user);
 	},
 };

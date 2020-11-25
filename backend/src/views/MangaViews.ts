@@ -25,6 +25,6 @@ export default {
 	},
 
 	renderMany(mangas: Manga[]) {
-		return mangas.map(this.render)
+		return mangas.map(this.render);
 	},
 };
