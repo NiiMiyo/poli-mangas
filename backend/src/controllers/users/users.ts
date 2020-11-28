@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { getRepository } from "typeorm";
 
-import * as yup from "yup";
-
-import UserModel from "../database/models/user";
-import UserViews from "../views/UserViews";
-import { userCreated } from "../server/routes/responses";
+import UserModel from "../../database/models/user";
+import UserViews from "../../views/UserViews";
+import { userCreated } from "../../server/routes/responses";
+import Hash from "../../crypto/hash";
+import validateUser from "./validateUser";
 
 export default {
 	async index(request: Request, response: Response) {
@@ -32,14 +32,17 @@ export default {
 	},
 
 	async create(request: Request, response: Response) {
-		const { id, password, email } = request.body;
+		let { id, password, email } = request.body;
 
-		const userRepo = getRepository(UserModel);
+		id = id.trim();
+		password = Hash.hash(password.trim());
+		email = email.trim();
 
 		const profile_picture = request.file;
-
 		const profilePicturePath =
-			profile_picture !== undefined ? profile_picture.filename : "undefined";
+			profile_picture !== undefined
+				? profile_picture.filename
+				: "undefined";
 
 		const userData = {
 			id,
@@ -49,42 +52,18 @@ export default {
 			profile_picture: profilePicturePath,
 		};
 
-		const validationSchema = yup.object().shape({
-			id: yup.string().required(),
-			password: yup.string().required(),
-			email: yup.string().email().required(),
-			profile_picture: yup.string(),
-		});
+		const userRepo = getRepository(UserModel);
+		const user = userRepo.create(userData);
 
-		await validationSchema.validate(userData, {
-			abortEarly: false,
-		});
+		const conflicts = await validateUser(user, userRepo);
 
-		const users = await userRepo.find();
-
-		let hasConflict = false;
-		const conflicts: string[] = [];
-
-		for (let i = 0; i < users.length; i++) {
-			const u = users[i];
-			if (u.id === id) {
-				hasConflict = true;
-				conflicts.push("Username already in use");
-			}
-			if (u.email === email) {
-				hasConflict = true;
-				conflicts.push("Email already registered");
-			}
-		}
-
-		if (hasConflict) {
+		if (conflicts.length > 0) {
 			return response.status(409).json({
 				conflicts,
 				statusCode: 409,
 			});
 		}
 
-		const user = userRepo.create(userData);
 		await userRepo.save(user);
 		return userCreated(response, user);
 	},
