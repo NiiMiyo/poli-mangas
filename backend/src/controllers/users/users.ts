@@ -20,10 +20,12 @@ export default {
 		const { id } = request.params;
 
 		const userRepo = getRepository(UserModel);
-		try {
-			const user = await userRepo.findOneOrFail(id);
+
+		const user = await userRepo.findOne(id);
+
+		if (user !== undefined) {
 			return response.status(200).json(UserViews.render(user));
-		} catch (err) {
+		} else {
 			return response.status(404).json({
 				message: "User not found",
 				statusCode: 404,

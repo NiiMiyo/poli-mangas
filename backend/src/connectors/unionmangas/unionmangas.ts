@@ -24,12 +24,10 @@ class UnionMangasConnector extends Connector {
 	}
 
 	async getMangaList(): Promise<UnionMangasManga[]> {
-		const apiResponse = await fetchJson(API_URL);
+		const apiResponse: ApiResponse = await fetchJson(API_URL);
 
-		const mangasApi = apiResponse.lsDocument as UnionMangasMangaApiResponse[];
-		const recode: number = apiResponse.totalRecode;
-
-		const mangas = mangasApi.map((m) => new UnionMangasManga(m));
+		let mangasApi = apiResponse.lsDocument;
+		const recode = apiResponse.totalRecode;
 
 		const startPage = 2;
 		const endPage = recode / mangasApi.length + 2;
@@ -38,26 +36,25 @@ class UnionMangasConnector extends Connector {
 
 		await Promise.all(
 			totalPages.map(async (p) => {
-				const pageMangas = (await fetchJson(API_URL + p))
-					.lsDocument as UnionMangasMangaApiResponse[];
+				const apiRes: ApiResponse = await fetchJson(API_URL + p);
 
-				pageMangas.forEach((m) => {
-					mangas.push(new UnionMangasManga(m));
-				});
+				mangasApi = mangasApi.concat(apiRes.lsDocument);
 			})
 		);
+
+		const mangas = mangasApi.map((m) => new UnionMangasManga(m));
 
 		return mangas;
 	}
 
 	async getManga(mangaId: string): Promise<UnionMangasManga | undefined> {
-		const apiResponse: UnionMangasMangaApiResponse = await fetchJson(
+		const mangaInfo: UnionMangasMangaApiResponse = await fetchJson(
 			MANGA_INFO_API_URL + mangaId
 		);
 
-		if ([null, "null"].includes(apiResponse.id)) return undefined;
+		if ([null, "null"].includes(mangaInfo.id)) return undefined;
 
-		return new UnionMangasManga(apiResponse);
+		return new UnionMangasManga(mangaInfo);
 	}
 
 	async getChapters(mangaId: string): Promise<Chapter[] | undefined> {
@@ -102,19 +99,12 @@ class UnionMangasManga extends Manga {
 	async getChapter(chapterId: string): Promise<UnionMangasChapter | undefined> {
 		const chapters = await this.getChapterList();
 
-		let chapterIndex = -1;
-
 		for (let i = 0; i < chapters.length; i++) {
 			const c = chapters[i];
-			if (c.id == chapterId) {
-				chapterIndex = i;
-				break;
-			}
+			if (c.id === chapterId) return c;
 		}
 
-		if (chapterIndex < 0) return undefined;
-
-		return chapters[chapterIndex];
+		return undefined;
 	}
 
 	async getSynopsis(): Promise<string> {
@@ -126,18 +116,22 @@ class UnionMangasManga extends Manga {
 	}
 
 	async getAuthor(): Promise<string> {
-		const res = (await fetchJson(this.url)) as UnionMangasMangaApiResponse;
+		const res: UnionMangasMangaApiResponse = await fetchJson(this.url);
 		const { listAuthors } = res;
 
-		const authors = listAuthors.map((a) => a.name.trim()).join(", ");
+		const authorArray = listAuthors.map((a) => a.name.trim());
+
+		const authors = authorArray.join(", ");
 		return authors;
 	}
 
 	async getYear(): Promise<string> {
-		const res = (await fetchJson(this.url)) as UnionMangasMangaApiResponse;
+		const res: UnionMangasMangaApiResponse = await fetchJson(this.url);
 		const { listYear } = res;
 
-		const year = listYear.map((y) => y.name.trim()).join(" - ");
+		const yearArray = listYear.map((y) => y.name.trim());
+
+		const year = yearArray.join(" - ");
 		return year;
 	}
 }

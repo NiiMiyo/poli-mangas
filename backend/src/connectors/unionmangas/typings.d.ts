@@ -35,3 +35,9 @@ type ChapterApiResponse = {
 type YearApiResponse = {
 	name: string;
 };
+
+type ApiResponse = {
+	lsDocument: UnionMangasMangaApiResponse[];
+	totalRecode: number;
+	currentPage: number;
+};

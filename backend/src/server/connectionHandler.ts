@@ -77,13 +77,15 @@ export class ConnectionHandler {
 
 		const manga = (await connector.getManga(mangaId)) as Manga;
 
-		const [synopsis, chapters, status, author, year] = await Promise.all([
+		const data = await Promise.all([
 			manga.getSynopsis(),
 			manga.getChapterList(),
 			manga.getStatus(),
 			manga.getAuthor(),
 			manga.getYear(),
 		]);
+
+		const [synopsis, chapters, status, author, year] = data;
 
 		const { id, cover, genres, title } = MangaViews.render(manga);
 

@@ -1,5 +1,4 @@
 import Manga from "../connectors/manga";
-import { filterStringArray } from "../generics";
 
 export type MangaView = {
 	id: string;
@@ -12,8 +11,6 @@ export type MangaView = {
 export default {
 	render(manga: Manga): MangaView {
 		let { connector, id, genres, title, cover } = manga;
-
-		genres = filterStringArray(genres);
 
 		return {
 			id,
