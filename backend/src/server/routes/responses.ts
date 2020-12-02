@@ -4,7 +4,6 @@ import UserModel from "../../database/models/user";
 import UserViews from "../../views/UserViews";
 
 const notFoundCode = 404;
-const internalErrorCode = 500;
 const createdCode = 201;
 
 export function connectorNotFound(response: Response): Response {

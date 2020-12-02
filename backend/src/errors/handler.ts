@@ -6,7 +6,7 @@ interface ValidationErrors {
 }
 
 const errorHandler: ErrorRequestHandler = (error, request, response, next) => {
-	console.log(error);
+	console.error(error);
 
 	let statusCode: number;
 

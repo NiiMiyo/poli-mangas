@@ -9,6 +9,8 @@ import usersRoutes from "./routes/users";
 import errorHandler from "../errors/handler";
 
 const app = express();
+app.disable("x-powered-by");
+
 app.use(cors());
 
 app.use(express.json());

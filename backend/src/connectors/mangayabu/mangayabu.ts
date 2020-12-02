@@ -1,10 +1,10 @@
 import Connector, { ConnectorProperties } from "../connector";
 
-import { fetchDom, fetchJson, loadEnv } from "../../generics";
+import { fetchDom, fetchJson, loadEnv, unarray } from "../../generics";
 import Manga from "../manga";
 import Chapter from "../chapter";
 
-import { DomToChapterImages, DomToChapterResponse } from "./domHandler";
+import { domToChapterImages, domToChapter } from "./domHandler";
 
 const { API_URL, MANGA_PAGE } = loadEnv(__dirname, "mangayabu.env");
 
@@ -21,7 +21,7 @@ class MangaYabuConnector extends Connector {
 	}
 
 	async getMangaList(): Promise<MangaYabuManga[]> {
-		const response = (await fetchJson(API_URL)) as MangaYabuApiResponse[];
+		const response: MangaYabuApiResponse[] = await fetchJson(API_URL);
 
 		let mangasApi = response.filter((m) => {
 			return m.slug != "null";
@@ -38,13 +38,12 @@ class MangaYabuConnector extends Connector {
 	async getManga(mangaId: string): Promise<MangaYabuManga | undefined> {
 		const mangas = await this.getMangaList();
 
-		const mangasIds = mangas.map((m) => m.id);
+		for (let i = 0; i < mangas.length; i++) {
+			const m = mangas[i];
+			if (m.id === mangaId) return m;
+		}
 
-		const indexOf = mangasIds.indexOf(mangaId);
-
-		if (indexOf < 0) return undefined;
-
-		return mangas[indexOf];
+		return undefined;
 	}
 
 	async getChapters(mangaId: string): Promise<MangaYabuChapter[] | undefined> {
@@ -52,9 +51,7 @@ class MangaYabuConnector extends Connector {
 
 		if (manga === undefined) return undefined;
 
-		const chaptersApi = await manga.getChapterList();
-
-		const chapters = chaptersApi.map((cap) => new MangaYabuChapter(cap));
+		const chapters = await manga.getChapterList();
 
 		return chapters;
 	}
@@ -88,14 +85,10 @@ class MangaYabuManga extends Manga {
 		const dom = (await fetchDom(this.url)).window.document;
 		const chaptersDom = dom.getElementsByClassName("single-chapter");
 
-		const chapters: MangaYabuChapter[] = [];
-
-		for (let i = 0; i < chaptersDom.length; i++) {
-			const element = chaptersDom[i];
-			const api = DomToChapterResponse(element);
-
-			chapters.push(new MangaYabuChapter(api));
-		}
+		const chapters = Array.from(chaptersDom).map((d) => {
+			const api = domToChapter(d);
+			return new MangaYabuChapter(api);
+		});
 
 		return chapters;
 	}
@@ -105,10 +98,7 @@ class MangaYabuManga extends Manga {
 
 		for (let i = 0; i < chapters.length; i++) {
 			const cap = chapters[i];
-
-			if (cap.id == chapterId) {
-				return new MangaYabuChapter(cap);
-			}
+			if (cap.id == chapterId) return cap;
 		}
 		return undefined;
 	}
@@ -118,7 +108,10 @@ class MangaYabuManga extends Manga {
 
 		const dom = (await fetchDom(this.url)).window.document;
 		const synopsisDiv = dom.getElementsByClassName("manga-synopsis")[0];
-		let text = synopsisDiv.textContent as string;
+
+		const textContent = synopsisDiv.textContent;
+		let text = textContent !== null ? textContent : "";
+
 		text = text.slice(synopsisPrefix.length);
 
 		return text.trim();
@@ -129,7 +122,10 @@ class MangaYabuManga extends Manga {
 		const statusDiv = dom.getElementsByClassName("manga-status")[0];
 
 		const statusPrefix = "Status:";
-		let text = statusDiv.textContent as string;
+
+		const textContent = statusDiv.textContent;
+		let text = textContent !== null ? textContent : "";
+
 		text = text.slice(statusPrefix.length);
 		return text.trim();
 	}
@@ -155,14 +151,9 @@ class MangaYabuChapter extends Chapter {
 
 		const pagesDom = dom.getElementsByClassName("manga-pages");
 
-		let pages: string[] = [];
-
-		for (let i = 0; i < pagesDom.length; i++) {
-			const page = pagesDom[i];
-			const pageImages = DomToChapterImages(page);
-
-			pages = pages.concat(pageImages);
-		}
+		let pages = unarray(
+			Array.from(pagesDom).map((pd) => domToChapterImages(pd))
+		);
 
 		return pages;
 	}
