@@ -9,6 +9,17 @@ async function validateUser(
 	user: UserModel,
 	repo: Repository<UserModel>
 ): Promise<string[]> {
+	const validationSchema = yup.object().shape({
+		id: yup.string().required(),
+		password: yup.string().required(),
+		email: yup.string().email().required(),
+		profile_picture: yup.string(),
+	});
+
+	await validationSchema.validate(user, {
+		abortEarly: false,
+	});
+
 	const conflicts: string[] = [];
 
 	const users = await repo.find();
@@ -26,17 +37,6 @@ async function validateUser(
 			conflicts.push("Email already registered");
 		}
 	}
-
-	const validationSchema = yup.object().shape({
-		id: yup.string().required(),
-		password: yup.string().required(),
-		email: yup.string().email().required(),
-		profile_picture: yup.string(),
-	});
-
-	await validationSchema.validate(user, {
-		abortEarly: false,
-	});
 
 	return conflicts;
 }

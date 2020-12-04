@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getRepository } from "typeorm";
+import connection from "../../database/connection";
 
 import UserModel from "../../database/models/user";
 import UserViews from "../../views/UserViews";
@@ -9,7 +9,9 @@ import validateUser from "./validateUser";
 
 export default {
 	async index(request: Request, response: Response) {
-		const userRepo = getRepository(UserModel);
+		const db = await connection;
+
+		const userRepo = db.getRepository(UserModel);
 
 		const users = await userRepo.find();
 
@@ -17,9 +19,11 @@ export default {
 	},
 
 	async show(request: Request, response: Response) {
+		const db = await connection;
+
 		const { id } = request.params;
 
-		const userRepo = getRepository(UserModel);
+		const userRepo = db.getRepository(UserModel);
 
 		const user = await userRepo.findOne(id);
 
@@ -34,11 +38,15 @@ export default {
 	},
 
 	async create(request: Request, response: Response) {
+		const db = await connection;
+
 		let { id, password, email } = request.body;
 
-		id = id.trim();
-		password = Hash.hash(password.trim());
-		email = email.trim();
+		password =
+			password !== undefined ? Hash.hash(password.trim()) : undefined;
+
+		id = id !== undefined ? id.trim() : undefined;
+		email = email !== undefined ? email.trim() : undefined;
 
 		const profile_picture = request.file;
 		const profilePicturePath =
@@ -54,7 +62,7 @@ export default {
 			profile_picture: profilePicturePath,
 		};
 
-		const userRepo = getRepository(UserModel);
+		const userRepo = db.getRepository(UserModel);
 		const user = userRepo.create(userData);
 
 		const conflicts = await validateUser(user, userRepo);
