@@ -6,14 +6,7 @@ const env = process.env.NODE_ENV === undefined ? "dev" : process.env.NODE_ENV;
 const paths = new Map<string, string>([
 	[
 		"dev",
-		path.join(
-			__dirname,
-			"..",
-			"..",
-			"public",
-			"uploads",
-			"profilePictures"
-		),
+		path.join(__dirname, "..", "..", "public", "uploads", "profilePictures"),
 	],
 	[
 		"test",

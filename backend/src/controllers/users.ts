@@ -41,9 +41,7 @@ export default {
 			profile_picture,
 		};
 
-		let { conflicts, ok, user } = await UserService.registerUser(
-			requestUser
-		);
+		let { conflicts, ok, user } = await UserService.registerUser(requestUser);
 
 		if (!ok) {
 			fs.unlink(profile_picture.path, () => {});

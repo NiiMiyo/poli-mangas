@@ -29,14 +29,14 @@
 		"ts-jest": "^26.4.4"
 	},
 	"license": "MIT",
-	"main": "index.js",
+	"main": "index.ts",
 	"name": "backend",
 	"scripts": {
 		"lint": "./node_modules/.bin/prettier ./** -w -u --config ./.prettierrc",
 		"prettier": "./node_modules/.bin/prettier ./** -u --config ./.prettierrc",
 		"start": "ts-node-dev --ignore-watch node_modules index.ts",
-		"typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
-		"test": "jest --no-cache --detectOpenHandles"
+		"test": "jest --no-cache --detectOpenHandles",
+		"typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
 	},
 	"version": "0.0.1"
 }
