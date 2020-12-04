@@ -1,12 +1,13 @@
 import app from "./src/server/server";
 import { loadEnv } from "./src/generics";
 
-const { PORT, ENVIROMENT } = loadEnv(__dirname, ".env");
+const { PORT, NODE_ENV } = loadEnv(__dirname, ".env");
 
-import "./src/database/connection";
+import connection from "./src/database/connection";
 
-app.listen(PORT);
-
-console.log(
-	`CORS-enabled server is now running in ${ENVIROMENT} on port ${PORT}`
-);
+app.listen(PORT, async () => {
+	await connection;
+	console.log(
+		`CORS-enabled server is now running in ${NODE_ENV} on port ${PORT}`
+	);
+});

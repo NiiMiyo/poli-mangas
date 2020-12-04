@@ -1,7 +1,7 @@
 import { Router } from "express";
 import multer from "multer";
 
-import profilePictureUploadConfigs from "../../configs/uploads/profilePicture";
+import profilePictureUploadConfigs from "../../configs/profilePicture";
 
 import UserController from "../../controllers/users/users";
 

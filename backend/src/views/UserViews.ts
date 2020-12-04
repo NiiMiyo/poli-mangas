@@ -1,7 +1,6 @@
 import UserModel from "../database/models/user";
-import { loadEnv } from "../generics";
 
-const { PORT } = loadEnv(__dirname, "../../.env");
+const PORT = 3333;
 
 export default {
 	render(user: UserModel) {
