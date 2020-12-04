@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import connectionService from "../server/service";
+import connectionService from "../services/connectionService";
 
 export default {
 	async show(request: Request, response: Response) {

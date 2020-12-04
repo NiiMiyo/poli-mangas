@@ -5,7 +5,9 @@ import {
 	unarray,
 } from "../generics";
 
-import connectionHandler, { ConnectionHandler } from "./connectionHandler";
+import connectionHandler, {
+	ConnectionHandler,
+} from "../server/connectionHandler";
 
 import Connector from "../connectors/connector";
 import Manga from "../connectors/manga";

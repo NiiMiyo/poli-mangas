@@ -4,7 +4,7 @@ import ConnectorsController from "../../controllers/connectors";
 import MangasController from "../../controllers/mangas";
 import ChaptersController from "../../controllers/chapters";
 
-import connectionService from "../service";
+import connectionService from "../../services/connectionService";
 
 const routes = Router();
 
