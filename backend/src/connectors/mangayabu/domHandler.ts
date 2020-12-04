@@ -1,3 +1,5 @@
+import { MangaYabuTypes } from "./mangayabutypes.d";
+
 const chapterPrefix = "Capítulo #";
 /**
  * Recebe o elemento de classe `single-chapter` da página no mangá e retorna um objeto correspondente
@@ -5,7 +7,7 @@ const chapterPrefix = "Capítulo #";
  * @param dom O elemento de classe `single-chapter`
  * @returns Um MangaYabuChapterResponse com as propriedades extraídas
  */
-export function domToChapter(dom: Element): MangaYabuChapterResponse {
+export function domToChapter(dom: Element): MangaYabuTypes.Chapter {
 	const a = dom.getElementsByTagName("a")[0];
 
 	let chapterId = a.innerHTML;
@@ -13,7 +15,7 @@ export function domToChapter(dom: Element): MangaYabuChapterResponse {
 
 	const title = chapterId;
 
-	const chapter: MangaYabuChapterResponse = {
+	const chapter: MangaYabuTypes.Chapter = {
 		id: chapterId,
 		link: a.href,
 

@@ -3,7 +3,7 @@ import multer from "multer";
 
 import profilePictureUploadConfigs from "../../configs/profilePicture";
 
-import UserController from "../../controllers/users/users";
+import UserController from "../../controllers/users";
 
 const routes = Router();
 const upload = multer(profilePictureUploadConfigs);

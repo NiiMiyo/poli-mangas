@@ -3,6 +3,7 @@ import Manga, { MangaProperties } from "../manga";
 import Chapter, { ChapterProperties } from "../chapter";
 
 import { fetchJson, loadEnv, range } from "../../generics";
+import { UnionMangasTypes } from "./unionmangastypes";
 
 const {
 	API_URL,
@@ -24,7 +25,7 @@ class UnionMangasConnector extends Connector {
 	}
 
 	async getMangaList(): Promise<UnionMangasManga[]> {
-		const apiResponse: ApiResponse = await fetchJson(API_URL);
+		const apiResponse: UnionMangasTypes.Api = await fetchJson(API_URL);
 
 		let mangasApi = apiResponse.lsDocument;
 		const recode = apiResponse.totalRecode;
@@ -36,7 +37,9 @@ class UnionMangasConnector extends Connector {
 
 		await Promise.all(
 			totalPages.map(async (p) => {
-				const apiRes: ApiResponse = await fetchJson(API_URL + p);
+				const apiRes: UnionMangasTypes.Api = await fetchJson(
+					API_URL + p
+				);
 
 				mangasApi = mangasApi.concat(apiRes.lsDocument);
 			})
@@ -48,7 +51,7 @@ class UnionMangasConnector extends Connector {
 	}
 
 	async getManga(mangaId: string): Promise<UnionMangasManga | undefined> {
-		const mangaInfo: UnionMangasMangaApiResponse = await fetchJson(
+		const mangaInfo: UnionMangasTypes.Manga = await fetchJson(
 			MANGA_INFO_API_URL + mangaId
 		);
 
@@ -73,7 +76,7 @@ class UnionMangasManga extends Manga {
 
 	url: string;
 
-	constructor(props: UnionMangasMangaApiResponse) {
+	constructor(props: UnionMangasTypes.Manga) {
 		const convertedProps: MangaProperties = {
 			id: props.id,
 			title: props.name,
@@ -89,14 +92,16 @@ class UnionMangasManga extends Manga {
 	}
 
 	async getChapterList(): Promise<UnionMangasChapter[]> {
-		const apiResponse: ChapterApiResponse[] = await fetchJson(
+		const apiResponse: UnionMangasTypes.Chapter[] = await fetchJson(
 			CHAPTERS_API_URL + this.id
 		);
 
 		return apiResponse.map((c) => new UnionMangasChapter(c));
 	}
 
-	async getChapter(chapterId: string): Promise<UnionMangasChapter | undefined> {
+	async getChapter(
+		chapterId: string
+	): Promise<UnionMangasChapter | undefined> {
 		const chapters = await this.getChapterList();
 
 		for (let i = 0; i < chapters.length; i++) {
@@ -116,7 +121,7 @@ class UnionMangasManga extends Manga {
 	}
 
 	async getAuthor(): Promise<string> {
-		const res: UnionMangasMangaApiResponse = await fetchJson(this.url);
+		const res: UnionMangasTypes.Manga = await fetchJson(this.url);
 		const { listAuthors } = res;
 
 		const authorArray = listAuthors.map((a) => a.name.trim());
@@ -126,7 +131,7 @@ class UnionMangasManga extends Manga {
 	}
 
 	async getYear(): Promise<string> {
-		const res: UnionMangasMangaApiResponse = await fetchJson(this.url);
+		const res: UnionMangasTypes.Manga = await fetchJson(this.url);
 		const { listYear } = res;
 
 		const yearArray = listYear.map((y) => y.name.trim());
@@ -137,7 +142,7 @@ class UnionMangasManga extends Manga {
 }
 
 class UnionMangasChapter extends Chapter {
-	constructor(props: ChapterApiResponse) {
+	constructor(props: UnionMangasTypes.Chapter) {
 		const titlePrefix = "Capítulo #";
 		const title = props.name.slice(titlePrefix.length);
 

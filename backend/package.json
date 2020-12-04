@@ -34,7 +34,7 @@
 	"scripts": {
 		"lint": "./node_modules/.bin/prettier ./** -w -u --config ./.prettierrc",
 		"prettier": "./node_modules/.bin/prettier ./** -u --config ./.prettierrc",
-		"start": "ts-node-dev --transpile-only --ignore-watch node_modules index.ts",
+		"start": "ts-node-dev --ignore-watch node_modules index.ts",
 		"typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
 		"test": "jest --no-cache --detectOpenHandles"
 	},

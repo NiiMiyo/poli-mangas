@@ -5,6 +5,7 @@ import Manga from "../manga";
 import Chapter from "../chapter";
 
 import { domToChapterImages, domToChapter } from "./domHandler";
+import { MangaYabuTypes } from "./mangayabutypes.d";
 
 const { API_URL, MANGA_PAGE } = loadEnv(__dirname, "mangayabu.env");
 
@@ -21,7 +22,7 @@ class MangaYabuConnector extends Connector {
 	}
 
 	async getMangaList(): Promise<MangaYabuManga[]> {
-		const response: MangaYabuApiResponse[] = await fetchJson(API_URL);
+		const response: MangaYabuTypes.Manga[] = await fetchJson(API_URL);
 
 		let mangasApi = response.filter((m) => {
 			return m.slug != "null";
@@ -46,7 +47,9 @@ class MangaYabuConnector extends Connector {
 		return undefined;
 	}
 
-	async getChapters(mangaId: string): Promise<MangaYabuChapter[] | undefined> {
+	async getChapters(
+		mangaId: string
+	): Promise<MangaYabuChapter[] | undefined> {
 		const manga = await this.getManga(mangaId);
 
 		if (manga === undefined) return undefined;
@@ -60,7 +63,7 @@ class MangaYabuConnector extends Connector {
 class MangaYabuManga extends Manga {
 	url: string;
 
-	constructor(mangaProps: MangaYabuApiResponse) {
+	constructor(mangaProps: MangaYabuTypes.Manga) {
 		const genreSeparator = /[,.]+/;
 		let genre = mangaProps.genre.split(genreSeparator);
 
@@ -142,7 +145,7 @@ class MangaYabuManga extends Manga {
 }
 
 class MangaYabuChapter extends Chapter {
-	constructor(props: MangaYabuChapterResponse) {
+	constructor(props: MangaYabuTypes.Chapter) {
 		super(props);
 	}
 
