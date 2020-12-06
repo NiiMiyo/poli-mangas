@@ -21,7 +21,9 @@ export default {
 		const user = await UserService.findUser(id);
 
 		if (user !== undefined) {
-			return response.status(200).json(UserViews.render(user));
+			return response
+				.status(200)
+				.json(UserViews.render(user));
 		} else {
 			return response.status(404).json({
 				message: "User not found",
@@ -41,7 +43,9 @@ export default {
 			profile_picture,
 		};
 
-		let { conflicts, ok, user } = await UserService.registerUser(requestUser);
+		let { conflicts, ok, user } = await UserService.registerUser(
+			requestUser
+		);
 
 		if (!ok) {
 			fs.unlink(profile_picture.path, () => {});

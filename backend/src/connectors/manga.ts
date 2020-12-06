@@ -27,7 +27,9 @@ export default abstract class Manga {
 
 	abstract async getChapterList(): Promise<Chapter[]>;
 
-	abstract async getChapter(chapterId: string): Promise<Chapter | undefined>;
+	abstract async getChapter(
+		chapterId: string
+	): Promise<Chapter | undefined>;
 
 	abstract async getSynopsis(): Promise<string>;
 

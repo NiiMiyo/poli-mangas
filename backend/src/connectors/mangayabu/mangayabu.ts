@@ -22,7 +22,9 @@ class MangaYabuConnector extends Connector {
 	}
 
 	async getMangaList(): Promise<MangaYabuManga[]> {
-		const response: MangaYabuTypes.Manga[] = await fetchJson(API_URL);
+		const response: MangaYabuTypes.Manga[] = await fetchJson(
+			API_URL
+		);
 
 		let mangasApi = response.filter((m) => {
 			return m.slug != "null";
@@ -47,7 +49,9 @@ class MangaYabuConnector extends Connector {
 		return undefined;
 	}
 
-	async getChapters(mangaId: string): Promise<MangaYabuChapter[] | undefined> {
+	async getChapters(
+		mangaId: string
+	): Promise<MangaYabuChapter[] | undefined> {
 		const manga = await this.getManga(mangaId);
 
 		if (manga === undefined) return undefined;
@@ -84,7 +88,9 @@ class MangaYabuManga extends Manga {
 
 	async getChapterList(): Promise<MangaYabuChapter[]> {
 		const dom = (await fetchDom(this.url)).window.document;
-		const chaptersDom = dom.getElementsByClassName("single-chapter");
+		const chaptersDom = dom.getElementsByClassName(
+			"single-chapter"
+		);
 
 		const chapters = Array.from(chaptersDom).map((d) => {
 			const api = domToChapter(d);
@@ -94,7 +100,9 @@ class MangaYabuManga extends Manga {
 		return chapters;
 	}
 
-	async getChapter(chapterId: string): Promise<MangaYabuChapter | undefined> {
+	async getChapter(
+		chapterId: string
+	): Promise<MangaYabuChapter | undefined> {
 		const chapters = await this.getChapterList();
 
 		for (let i = 0; i < chapters.length; i++) {
@@ -108,7 +116,9 @@ class MangaYabuManga extends Manga {
 		const synopsisPrefix = " Sinopse";
 
 		const dom = (await fetchDom(this.url)).window.document;
-		const synopsisDiv = dom.getElementsByClassName("manga-synopsis")[0];
+		const synopsisDiv = dom.getElementsByClassName(
+			"manga-synopsis"
+		)[0];
 
 		const textContent = synopsisDiv.textContent;
 		let text = textContent !== null ? textContent : "";

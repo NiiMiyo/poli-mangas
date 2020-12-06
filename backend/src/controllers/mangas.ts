@@ -7,7 +7,10 @@ export default {
 	async index(request: Request, response: Response) {
 		const { connectorId, mangaId } = request.params;
 
-		const manga = await connectionService.getManga(connectorId, mangaId);
+		const manga = await connectionService.getManga(
+			connectorId,
+			mangaId
+		);
 
 		if (manga === undefined) return mangaNotFound(response);
 
@@ -16,7 +19,9 @@ export default {
 
 	async show(request: Request, response: Response) {
 		const { connectorId } = request.params;
-		const mangas = await connectionService.getMangaList(connectorId);
+		const mangas = await connectionService.getMangaList(
+			connectorId
+		);
 
 		if (mangas === undefined) return connectorNotFound(response);
 

@@ -15,20 +15,7 @@ import Manga from "../connectors/manga";
 import ConnectorViews from "../views/ConnectorViews";
 import MangaViews, { MangaView } from "../views/MangaViews";
 
-function filterMangaGenres(manga: MangaView): MangaView {
-	const { id, title, connector, cover } = manga;
-	const genres = filterStringArray(manga.genres);
-
-	return {
-		id,
-		title,
-		cover,
-		connector,
-		genres,
-	};
-}
-
-function filterSearchManga(searchTerm: string, manga: Manga): boolean {
+function filterSearchManga(searchTerm: string, manga: MangaView): boolean {
 	const id = removeAccents(manga.id.toLowerCase());
 	const title = removeAccents(manga.title.toLowerCase());
 	const genres = manga.genres.map((g) => removeAccents(g.toLowerCase()));
@@ -64,19 +51,25 @@ class ConnectionService {
 		const validation = this.handler.validateConnector(connectorId);
 		if (!validation) return undefined;
 
-		const connector = this.handler.getConnector(connectorId) as Connector;
+		const connector = this.handler.getConnector(
+			connectorId
+		) as Connector;
 
 		return ConnectorViews.render(connector);
 	}
 
 	async getMangaList(): Promise<MangaView[]>;
-	async getMangaList(connectorId: string): Promise<MangaView[] | undefined>;
+	async getMangaList(
+		connectorId: string
+	): Promise<MangaView[] | undefined>;
 
 	async getMangaList(connectorId?: string) {
 		let connectorsIds: string[];
 
 		if (connectorId === undefined) {
-			connectorsIds = this.getConnectorList().map((c) => c.id);
+			connectorsIds = this.getConnectorList().map(
+				(c) => c.id
+			);
 		} else {
 			connectorsIds = [connectorId];
 		}
@@ -95,7 +88,7 @@ class ConnectionService {
 		const mangasArray = unarray(mangasDoubleArray);
 		const mangas = MangaViews.renderMany(mangasArray);
 
-		const __return = mangas == [] ? undefined : mangas;
+		const __return = mangas.length === 0 ? undefined : mangas;
 
 		return __return;
 	}
@@ -103,16 +96,6 @@ class ConnectionService {
 	async getManga(connectorId: string, mangaId: string) {
 		let manga = await this.handler.getManga(connectorId, mangaId);
 		if (manga === undefined) return undefined;
-
-		const data = filterMangaGenres({
-			connector: connectorId,
-			cover: manga.cover,
-			genres: manga.genres,
-			id: manga.id,
-			title: manga.title,
-		});
-
-		manga.genres = data.genres;
 
 		return manga;
 	}
@@ -133,12 +116,8 @@ class ConnectionService {
 		return filterStringArray(pages);
 	}
 
-	async searchManga(searchTerm: string): Promise<Manga[]> {
-		const connectors = this.handler.connectorList;
-		const connectorsMangas = await Promise.all(
-			connectors.map((c) => c.getMangaList())
-		);
-		const mangas = unarray(connectorsMangas);
+	async searchManga(searchTerm: string): Promise<MangaView[]> {
+		const mangas = await this.handler.getAllMangas();
 
 		let filteredMangas = mangas.filter((m) => {
 			return filterSearchManga(searchTerm, m);

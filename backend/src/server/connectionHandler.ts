@@ -1,16 +1,16 @@
-import { multipleAnd } from "../generics";
+import { multipleAnd, unarray } from "../generics";
 
 import Connector from "../connectors/connector";
 import ConnectorViews from "../views/ConnectorViews";
-
-import mangayabu from "../connectors/mangayabu/mangayabu";
-import unionmangas from "../connectors/unionmangas/unionmangas";
 
 import Manga from "../connectors/manga";
 import Chapter from "../connectors/chapter";
 
 import MangaViews from "../views/MangaViews";
 import ChapterViews from "../views/ChapterViews";
+
+import mangayabu from "../connectors/mangayabu/mangayabu";
+import unionmangas from "../connectors/unionmangas/unionmangas";
 
 export class ConnectionHandler {
 	private connectors: Connector[];
@@ -40,7 +40,10 @@ export class ConnectionHandler {
 		return Boolean(connector);
 	}
 
-	async validateManga(connectorId: string, mangaId: string): Promise<boolean> {
+	async validateManga(
+		connectorId: string,
+		mangaId: string
+	): Promise<boolean> {
 		const connector = this.getConnector(connectorId);
 		const manga = await connector?.getManga(mangaId);
 
@@ -70,7 +73,10 @@ export class ConnectionHandler {
 	}
 
 	async getManga(connectorId: string, mangaId: string) {
-		const validation = await this.validateManga(connectorId, mangaId);
+		const validation = await this.validateManga(
+			connectorId,
+			mangaId
+		);
 		if (!validation) return undefined;
 
 		const connector = this.getConnector(connectorId) as Connector;
@@ -105,7 +111,10 @@ export class ConnectionHandler {
 	}
 
 	async getChapterList(connectorId: string, mangaId: string) {
-		const validation = await this.validateManga(connectorId, mangaId);
+		const validation = await this.validateManga(
+			connectorId,
+			mangaId
+		);
 		if (!validation) return undefined;
 
 		const connector = this.getConnector(connectorId) as Connector;
@@ -117,7 +126,11 @@ export class ConnectionHandler {
 		return ChapterViews.renderMany(chapters);
 	}
 
-	async getChapter(connectorId: string, mangaId: string, chapterId: string) {
+	async getChapter(
+		connectorId: string,
+		mangaId: string,
+		chapterId: string
+	) {
 		const validation = await this.validateChapter(
 			connectorId,
 			mangaId,
@@ -157,6 +170,19 @@ export class ConnectionHandler {
 		const images = await chapter.getChapterImages();
 
 		return images;
+	}
+
+	async getAllMangas() {
+		const mangasSquare = await Promise.all(
+			this.connectorList.map(async (c) => {
+				const m = await c.getMangaList();
+				return m;
+			})
+		);
+
+		const mangas = unarray(mangasSquare);
+
+		return MangaViews.renderMany(mangas);
 	}
 }
 

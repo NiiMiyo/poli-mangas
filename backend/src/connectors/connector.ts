@@ -28,5 +28,7 @@ export default abstract class Connector {
 
 	abstract async getManga(mangaId: string): Promise<Manga | undefined>;
 
-	abstract async getChapters(mangaId: string): Promise<Chapter[] | undefined>;
+	abstract async getChapters(
+		mangaId: string
+	): Promise<Chapter[] | undefined>;
 }

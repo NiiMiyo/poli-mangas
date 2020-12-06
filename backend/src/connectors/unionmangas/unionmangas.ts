@@ -25,7 +25,9 @@ class UnionMangasConnector extends Connector {
 	}
 
 	async getMangaList(): Promise<UnionMangasManga[]> {
-		const apiResponse: UnionMangasTypes.Api = await fetchJson(API_URL);
+		const apiResponse: UnionMangasTypes.Api = await fetchJson(
+			API_URL
+		);
 
 		let mangasApi = apiResponse.lsDocument;
 		const recode = apiResponse.totalRecode;
@@ -37,7 +39,9 @@ class UnionMangasConnector extends Connector {
 
 		await Promise.all(
 			totalPages.map(async (p) => {
-				const apiRes: UnionMangasTypes.Api = await fetchJson(API_URL + p);
+				const apiRes: UnionMangasTypes.Api = await fetchJson(
+					API_URL + p
+				);
 
 				mangasApi = mangasApi.concat(apiRes.lsDocument);
 			})
@@ -97,7 +101,9 @@ class UnionMangasManga extends Manga {
 		return apiResponse.map((c) => new UnionMangasChapter(c));
 	}
 
-	async getChapter(chapterId: string): Promise<UnionMangasChapter | undefined> {
+	async getChapter(
+		chapterId: string
+	): Promise<UnionMangasChapter | undefined> {
 		const chapters = await this.getChapterList();
 
 		for (let i = 0; i < chapters.length; i++) {
