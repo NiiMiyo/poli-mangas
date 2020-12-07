@@ -1,0 +1,22 @@
+<svg width="29" height="28" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_b)">
+<mask id="path-1-inside-1" fill="white">
+<rect x="5" y="11" width="17.7895" height="16.4211" rx="1.6"/>
+</mask>
+<rect x="5" y="11" width="17.7895" height="16.4211" rx="1.6" fill="white"/>
+<rect x="5" y="11" width="17.7895" height="16.4211" rx="1.6" stroke="white" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" mask="url(#path-1-inside-1)"/>
+</g>
+<line x1="2.20152" y1="13.1788" x2="14.1788" y2="2.79848" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<line x1="14.8265" y1="2.89523" x2="26.0409" y2="13.3079" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="10" y="17" width="4" height="9" rx="0.8" fill="#242323"/>
+<path d="M13.2794 3.74885C13.6728 3.34001 14.3272 3.34001 14.7206 3.74885L21.0308 10.3066C21.6421 10.9419 21.1919 12 20.3102 12H7.68977C6.80811 12 6.35788 10.9419 6.9692 10.3066L13.2794 3.74885Z" fill="white"/>
+<rect x="19" y="1" width="5" height="8" rx="1" fill="white"/>
+<defs>
+<filter id="filter0_b" x="1" y="7" width="25.7895" height="24.4211" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feGaussianBlur in="BackgroundImage" stdDeviation="2"/>
+<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
+</filter>
+</defs>
+</svg>
