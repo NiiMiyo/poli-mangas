@@ -17,7 +17,14 @@ const paths = new Map<string, string>([
 	],
 	[
 		"test",
-		path.join(__dirname, "..", "..", "tests", "uploads", "profilePictures"),
+		path.join(
+			__dirname,
+			"..",
+			"..",
+			"tests",
+			"uploads",
+			"profilePictures"
+		),
 	],
 ]);
 

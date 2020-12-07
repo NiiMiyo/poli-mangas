@@ -98,16 +98,23 @@ export function multipleOr(...comparators: any[]): boolean {
  * Recebe uma string[] e retorna uma cópia sem
  * elementos vazios, nulos ou indefinidos
  *
+ * Também remove espaços em branco no inicio e final de cada string
+ *
  * @param strings Array de strings a serem filtradas
  * @returns string[] sem valores vazios, nulos ou indefinidos
  */
 export function filterStringArray(strings: string[]): string[] {
-	const return_ = strings.filter((s) => {
-		const isEmpty = [null, undefined, ""].includes(s);
+	const filteredStrings: string[] = [];
 
-		return !isEmpty;
+	strings.forEach((s) => {
+		s = s.trim();
+
+		if (![null, undefined, ""].includes(s)) {
+			filteredStrings.push(s);
+		}
 	});
-	return return_;
+
+	return filteredStrings;
 }
 
 /**

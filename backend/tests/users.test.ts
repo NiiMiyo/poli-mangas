@@ -34,7 +34,10 @@ describe("User sign-up", () => {
 		const response = await supertest(app)
 			.post("/users")
 			.field(userData)
-			.attach("profile_picture", `${__dirname}/img/10509135.jpg`);
+			.attach(
+				"profile_picture",
+				`${__dirname}/img/10509135.jpg`
+			);
 
 		const expectedResponse = {
 			message: "User created succesfully",
@@ -62,7 +65,10 @@ describe("User sign-up", () => {
 		const response = await supertest(app)
 			.post("/users")
 			.field(userData)
-			.attach("profile_picture", `${__dirname}/img/10509135.jpg`);
+			.attach(
+				"profile_picture",
+				`${__dirname}/img/10509135.jpg`
+			);
 
 		const jsonResponse = JSON.parse(response.text);
 
@@ -88,7 +94,10 @@ describe("User sign-up", () => {
 		const response = await supertest(app)
 			.post("/users")
 			.field(userData)
-			.attach("profile_picture", `${__dirname}/img/10509135.jpg`);
+			.attach(
+				"profile_picture",
+				`${__dirname}/img/10509135.jpg`
+			);
 
 		const jsonResponse = JSON.parse(response.text);
 
@@ -114,7 +123,10 @@ describe("User sign-up", () => {
 		const response = await supertest(app)
 			.post("/users")
 			.field(userData)
-			.attach("profile_picture", `${__dirname}/img/10509135.jpg`);
+			.attach(
+				"profile_picture",
+				`${__dirname}/img/10509135.jpg`
+			);
 
 		const jsonResponse = JSON.parse(response.text);
 
@@ -137,7 +149,9 @@ describe("User sign-up", () => {
 			password: "12345678",
 		};
 
-		const response = await supertest(app).post("/users").field(userData);
+		const response = await supertest(app)
+			.post("/users")
+			.field(userData);
 		// .attach("profile_picture", `${__dirname}/img/10509135.jpg`);
 
 		const jsonResponse = JSON.parse(response.text);

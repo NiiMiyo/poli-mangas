@@ -25,7 +25,9 @@ class UnionMangasConnector extends Connector {
 	}
 
 	async getMangaList(): Promise<UnionMangasManga[]> {
-		const apiResponse: UnionMangasTypes.Api = await fetchJson(API_URL);
+		const apiResponse: UnionMangasTypes.Api = await fetchJson(
+			API_URL
+		);
 
 		let mangasApi = apiResponse.lsDocument;
 		const recode = apiResponse.totalRecode;

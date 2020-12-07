@@ -17,9 +17,11 @@
 		}
 	],
 	"printWidth": 80,
-	"proseWrap": "preserve",
+	"proseWrap": "always",
+	"quoteProps": "as-needed",
 	"semi": true,
 	"singleQuote": false,
 	"trailingComma": "es5",
-	"useTabs": true
+	"useTabs": true,
+	"tabWidth": 8
 }
