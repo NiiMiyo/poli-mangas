@@ -77,7 +77,10 @@ export default {
 		);
 
 		if (!ok) {
-			fs.unlink(new_profile_picture.path, () => {});
+			if (new_profile_picture !== undefined) {
+				fs.unlink(new_profile_picture.path, () => {});
+			}
+
 			return response.status(400).json({
 				message: "Invalid login",
 				conflicts,
