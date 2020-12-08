@@ -14,6 +14,12 @@ export default function Inicio() {
         navigationMenu.navigate('Menu')
     }
 
+    const navigationSearch = useNavigation()
+
+    function routeToSearch(){
+        navigationSearch.navigate('PesquisaNotFound')
+    }
+
     return (
         <SafeAreaView style={styles.container}>
 
@@ -36,7 +42,7 @@ export default function Inicio() {
                         </Image>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.lupaIcon}>
+                    <TouchableOpacity style={styles.lupaIcon} onPress={routeToSearch}>
                         <Search name="search" size={20} color="#FFFFFF" />
                     </TouchableOpacity>
 
@@ -53,7 +59,6 @@ export default function Inicio() {
                 </View>
             </View>
 
-            {/* fazer a programação que pegue os links das imagens pra adicionar aqui*/}
             <View style={{ width: 357, height: 120, flexDirection: 'row', justifyContent: 'space-between', top: 95, left: 9 }}>
                 <TouchableOpacity onPress={() => { }}>
                     <Image
@@ -248,14 +253,16 @@ const styles = StyleSheet.create({
         borderRadius: 5,
 
         marginTop: 8,
-        left: 234,
+        left: 225,
         width: 54,
-        height: 13
+        height: 13,
+
+        justifyContent:'center'
     },
 
     verMais: {
         fontSize: 9,
-        fontWeight: '900',
+        fontFamily:'Ruda_700Bold',
         textAlign: 'center',
         color: '#FFFFFF'
     },
@@ -265,9 +272,11 @@ const styles = StyleSheet.create({
         borderRadius: 5,
 
         marginTop: 8,
-        left: 44,
+        left: 35,
         width: 54,
-        height: 13
+        height: 13,
+
+        justifyContent:'center'
     },
 
     buttonVerMais3: {
@@ -275,9 +284,11 @@ const styles = StyleSheet.create({
         borderRadius: 5,
 
         marginTop: 8,
-        left: 236,
+        left: 234,
         width: 54,
-        height: 13
+        height: 13,
+
+        justifyContent:'center'
     },
 
     buttonMangas: {

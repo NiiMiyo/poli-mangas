@@ -1,20 +1,26 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, SafeAreaView, Platform, StatusBar } from 'react-native';
 import BottomBar from '../components/BottomBar';
-import Header from '../components/Header';
+
 
 export default function CategoriasMenu() {
 
+    const navigationSynopsys = useNavigation()
+
+    function routeToSynopsys(){
+        navigationSynopsys.navigate('Sinopses')
+    }
+    
     return (
         <SafeAreaView style={styles.container}>
 
-            <Header title="NOME DA CATEGORIA" />
 
-            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: 331, height: 156 }}>
-                <TouchableOpacity onPress={() => { }}>
+            <View style={{width: 331, height: 190, marginTop: 20, marginLeft: 6, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                <TouchableOpacity onPress={routeToSynopsys}>
                     <Image
                         style={styles.button}
-                        source={{ uri: 'http://vignette1.wikia.nocookie.net/cowboybebop/images/2/22/MangaSS1.jpg/revision/latest?cb=20090317032643' }}>
+                        source={{ uri: 'https://mangayabu.top/capas/haikyuu-manga.jpg' }}>
                     </Image>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonAdd} onPress={() => { }}>
@@ -24,7 +30,7 @@ export default function CategoriasMenu() {
                 <TouchableOpacity onPress={() => { }}>
                     <Image
                         style={styles.button}
-                        source={{ uri: 'http://vignette1.wikia.nocookie.net/cowboybebop/images/2/22/MangaSS1.jpg/revision/latest?cb=20090317032643' }}>
+                        source={{ uri: '' }}>
                     </Image>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonAdd} onPress={() => { }}>
@@ -34,7 +40,7 @@ export default function CategoriasMenu() {
                 <TouchableOpacity onPress={() => { }}>
                     <Image
                         style={styles.button}
-                        source={{ uri: 'http://vignette1.wikia.nocookie.net/cowboybebop/images/2/22/MangaSS1.jpg/revision/latest?cb=20090317032643' }}>
+                        source={{ uri: '' }}>
                     </Image>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonAdd} onPress={() => { }}>
@@ -43,10 +49,10 @@ export default function CategoriasMenu() {
 
             </View>
 
-            <View style={{ width: 331, height: 156, flexDirection: 'row', justifyContent: 'space-between' }}>
+            <View style={styles.text}>
+                <Text style={styles.h2}>Haikyuu!!</Text>
                 <Text style={styles.h2}>NOME</Text>
-                <Text style={styles.h3}>NOME</Text>
-                <Text style={styles.h4}>NOME</Text>
+                <Text style={styles.h2}>NOME</Text>
             </View>
 
             <BottomBar page="Default" />
@@ -73,33 +79,14 @@ const styles = StyleSheet.create({
     },
 
     h2: {
-        paddingLeft: 48,
-        top: 150,
+        left: 21,
+        top: 120,
 
         fontWeight: '900',
+        fontFamily:'Ruda_900Black',
         fontSize: 15,
 
-        color: '#FFFFFF'
-    },
-
-    h3: {
-        paddingLeft: 48,
-        top: 150,
-
-        fontWeight: '900',
-        fontSize: 15,
-
-        color: '#FFFFFF'
-    },
-
-    h4: {
-        paddingLeft: 60,
-        top: 150,
-
-        fontWeight: '900',
-        fontSize: 15,
-
-        color: '#FFFFFF'
+        color: '#FFFFFF',
     },
 
     button: {
@@ -127,4 +114,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
+    text:{
+        width:280, 
+        height:165, 
+        
+        marginLeft:40,
+        marginTop:-10,
+        
+        flexDirection:'row', 
+        justifyContent:'space-between', 
+    
+    }
 })

@@ -1,107 +1,133 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Platform, SafeAreaView, StatusBar} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Platform, SafeAreaView, StatusBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
-import { Overlay } from 'react-native-elements';
 
-import homeIcon from '../images/home-v2.svg';
-import categoriesIcon from '../images/categories-v2.svg';
-import libraryIcon from '../images/library-v2.svg';
+import homeIcon from '../images/home-v3.png';
+import categoriesIcon from '../images/categories.png';
+import libraryIcon from '../images/library.png';
 import { useState } from 'react';
-import { Button } from 'react-native';
 
 export default function Menu() {
 
     const navigationHome = useNavigation()
 
-    function routeToHome(){
+    function routeToHome() {
         navigationHome.navigate('Inicio')
     }
 
     const navigationCategories = useNavigation()
 
-    function routeToCategories(){
+    function routeToCategories() {
         navigationCategories.navigate('Categorias')
     }
 
     const navigationLibrary = useNavigation()
 
-    function routeToLibrary(){
+    function routeToLibrary() {
         navigationLibrary.navigate('Biblioteca')
     }
 
-    return ( 
-      <SafeAreaView style={styles.container}>
-          <View>
-            <View style={styles.background1}></View>
-          </View>
+    const [images, setImages] = useState<string[]>([]);
 
-          <View style={styles.profile}>
-                <View>
-                    {/* pegar a foto do user e colocar ai */}
-                        <Image 
-                        style={styles.pic}
-                        source= {{uri: 'https://i.pinimg.com/originals/ce/49/97/ce4997d03391041106c5d555b306c77a.png'}}>
-                        </Image>
-                </View>
+    async function handleSelectImages() {
+        const { status } = await ImagePicker.requestCameraRollPermissionsAsync()
 
-                {/* fazer a lógica de pegar o user e colocar ai */}
-                <View style={{justifyContent:'center', alignContent:'center'}}>
-                    <Text style={styles.user}>pam</Text>
-                </View>
+        if (status !== 'granted') {
+            alert('Precisamos de acesso')
+            return;
+        }
 
-                <View>
-                    <TouchableOpacity style={styles.buttonEdit} onPress={() => {}}>
-                            <Text style={styles.edit}>EDITAR</Text>
-                    </TouchableOpacity>
-                </View>
-          </View>
+        const result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            quality: 1,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        });
 
-          <View style={{paddingLeft:20, justifyContent:'space-between', width: 200, height: 200}}>
+        if (result.cancelled) {
+            return;
+        }
 
-                <View>
-                    <TouchableOpacity onPress={ routeToHome }>
-                        {/* <Image 
+        const { uri: image } = result;
+
+        setImages([...images, image]);
+
+    }
+
+    return (
+        <SafeAreaView style={styles.container}>
+
+            <View style={styles.background1}>
+                <Text style={styles.user}>Anne JojoFag</Text>
+            </View>
+
+            <View style={styles.profile}>
+                <Image
+                    style={styles.pic}
+                    source={{ uri: 'https://i.pinimg.com/originals/ce/49/97/ce4997d03391041106c5d555b306c77a.png' }}>
+                </Image>
+
+                <TouchableOpacity style={styles.buttonEdit} onPress={handleSelectImages}>
+                    <Text style={styles.edit}>EDITAR</Text>
+                </TouchableOpacity>
+            </View>
+
+            <View style={styles.uploadedImagesContainer}>
+                {images.map(image => {
+                    return (
+                        <Image
+                            key={image}
+                            source={{ uri: image }}
+                            style={styles.uploadedImage}
+                        />
+                    );
+                })}
+            </View>
+
+
+            <View style={{ paddingLeft: 20, justifyContent: 'space-between', width: 200, height: 200, top: -250 }}>
+
+                <TouchableOpacity style={{ width: 102, height: 27, flexDirection: 'row', justifyContent: 'space-between' }} onPress={routeToHome}>
+                    <Image
                         style={styles.homeIcon}
                         source={homeIcon}>
-                        </Image> */}
+                    </Image>
 
-                        <Text style={styles.h1Home}>ÍNICIO</Text>
-                    </TouchableOpacity>
-                </View>
+                    <Text style={styles.h1Home}>ÍNICIO</Text>
+                </TouchableOpacity>
 
-                <View>
-                    <TouchableOpacity onPress={ routeToLibrary }>
-                        {/* <Image 
+
+
+                <TouchableOpacity style={{width: 156, height: 27, flexDirection:'row', justifyContent:'space-between'}} onPress={routeToLibrary}>
+                    <Image
                         style={styles.libraryIcon}
                         source={libraryIcon}>
-                        </Image> */}
+                    </Image>
 
-                        <Text style={styles.h1Home}>BIBLIOTECA</Text>
-                    </TouchableOpacity>
+                    <Text style={styles.h1Home}>BIBLIOTECA</Text>
+                </TouchableOpacity>
 
-              </View>
 
-                <View>
-                    <TouchableOpacity onPress={ routeToCategories }>
-                        {/* <Image 
+
+
+                <TouchableOpacity style={{width: 165, height: 40, flexDirection:'row', justifyContent:'space-between'}} onPress={routeToCategories}>
+                    <Image
                         style={styles.categoriesIcon}
                         source={categoriesIcon}>
-                        </Image> */}
+                    </Image>
 
-                        <Text style={styles.h1Home}>CATEGORIAS</Text>
-                    </TouchableOpacity>
-                </View>
+                    <Text style={styles.h1Home}>CATEGORIAS</Text>
+                </TouchableOpacity>
 
-          </View>
-          
+            </View>
 
-      </SafeAreaView>
+
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
-    container:{
+    container: {
         paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0
     },
 
@@ -109,12 +135,18 @@ const styles = StyleSheet.create({
         width: 375,
         height: 306,
 
+        alignItems:'center',
         backgroundColor: '#232424'
     },
 
     profile:{
-        justifyContent:'center'
-    
+        width: 375,
+        height: 306,
+        top: 0,
+
+        alignItems:'center',
+
+        justifyContent:'center',
     },
 
     pic:{
@@ -122,8 +154,7 @@ const styles = StyleSheet.create({
         
         width: 125,
         height: 125,
-        left: 125,
-        top: 63,
+        top: -230,
 
         borderRadius: 500,
         borderWidth: 2,
@@ -131,20 +162,19 @@ const styles = StyleSheet.create({
     },
 
     user:{
-        left: 160,
-        top: -110,
+        marginTop: 212,
 
         fontSize: 15,
-        fontWeight: '900'
+        fontWeight: '900',
         // fontFamily: Ruda,
+        color:'#FFFFFF'
         
     },
 
     buttonEdit:{
         width: 112,
         height: 22,
-        left: 120,
-        top: -80,
+        top: -200,
 
         backgroundColor: '#FFFFFF',
         borderRadius: 5,
@@ -154,40 +184,50 @@ const styles = StyleSheet.create({
     edit:{
         left: 31,
 
-        // fontFamily: Ruda,
         fontWeight: '900',
         fontSize: 15,
 
         color: '#573A80'
     },
 
-    items:{},
-
     h1Home:{
-        // fontFamily: Ruda,
         fontWeight: '900',
         fontSize: 20,
 
         color: '#573A80'
     },
 
-    // homeIcon:{
-    //     width: 102,
-    //     height: 27,
-    //     left: 0,
-    //     top: 0,
-    // },
-    // libraryIcon:{
-    //     width: 149,
-    //     height: 27,
-    //     left: 0,
-    //     top: 86,
-    // },
-    // categoriesIcon:{
-    //     width: 153,
-    //     height: 27,
-    //     left: 0,
-    //     top: 172,
-    // },
+    homeIcon:{
+        width: 26,
+        height: 26,
+        left: 0,
+        top: 0,
+    },
+    libraryIcon:{
+        width: 22,
+        height: 24,
+        top: 2
+    },
+    categoriesIcon:{
+        width: 22,
+        height: 12,
+        top: 10
+    },
 
+    uploadedImagesContainer:{
+        flexDirection: 'row'
+    },
+    uploadedImage:{
+        position:'absolute',
+        width: 125,
+        height: 125,
+    
+        top: -537,
+
+        marginLeft: 125,
+
+        borderRadius: 500,
+        borderWidth: 2,
+        borderColor: '#FFFFFF'
+    }
 })

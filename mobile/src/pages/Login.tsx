@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, TextInput, Image, SafeAreaVie
 import { Ruda_400Regular, Ruda_600SemiBold, Ruda_700Bold, Ruda_900Black } from '@expo-google-fonts/ruda'
 
 import emailIcon from '../images/icon-email.png';
-import lockIcon from '../images/cadeado.png';
+import lockIcon from '../images/lock.png';
 
 import { useNavigation } from '@react-navigation/native';
 
@@ -17,6 +17,18 @@ export default function Login() {
   function routeToHome() {
     navigationHome.navigate('Inicio')
   }
+
+    const emailAttribute = email;
+    const passwordAttribute = password;
+
+    function validationField() {
+      if(emailAttribute == '' || passwordAttribute == '') {
+        return alert("Preencha os campos!!")
+      }
+      else{
+        return routeToHome();
+      }
+    }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -42,7 +54,7 @@ export default function Login() {
         placeholderTextColor="#A697BB"
         underlineColorAndroid="transparent"
         value={email}
-        onChangeText={setEmail}
+        onChangeText={(email) => setEmail(email)}
         style={styles.user}>
       </TextInput>
 
@@ -50,16 +62,19 @@ export default function Login() {
         placeholder="Senha"
         placeholderTextColor="#A697BB"
         underlineColorAndroid="transparent"
+        secureTextEntry={true}
         value={password}
-        onChangeText={setPassword}
+        onChangeText={(password) => setPassword(password)}
         style={styles.password}>
       </TextInput>
 
-      <TouchableOpacity style={styles.button} onPress={routeToHome}>
+      <TouchableOpacity style={styles.button} onPress={validationField}>
         <Text style={styles.login}>LOGIN</Text>
       </TouchableOpacity>
 
-      <Text style={styles.textSignUp}>Ainda não tem uma conta?</Text>
+      <View style={{alignItems:'center'}}>
+        <Text style={styles.textSignUp}>Ainda não tem uma conta?</Text>
+      </View>
 
       <TouchableOpacity style={styles.button2} onPress={() => { }}>
         <Text style={styles.signUp}>CADASTRE-SE</Text>
@@ -172,7 +187,6 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontSize: 20,
     justifyContent: 'center',
-    paddingLeft: 75,
     fontFamily: 'Ruda_900Black'
   },
 
@@ -181,7 +195,7 @@ const styles = StyleSheet.create({
     width: 237,
     height: 44,
     backgroundColor: '#242323',
-    marginTop: 50,
+    marginTop: 30,
     borderRadius: 5,
     elevation: 3,
 
@@ -193,6 +207,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#ffffff',
     textAlign: 'center',
-    fontWeigh: '900'
+    fontWeigh: '900',
+    fontFamily: 'Ruda_900Black'
   },
 });

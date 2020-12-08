@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, SafeAreaView, Platform, StatusBar} from 'react-native';
 
-import Header from '../components/Header';
 import BottomBar from '../components/BottomBar';
 import MangasResume from '../components/MangasResume';
 
@@ -10,18 +9,22 @@ export default function Sinopses() {
     return (
 
         <SafeAreaView style={styles.container}>
-    
-            <Header title="" />
 
             <View>
                 <MangasResume 
-                pic=""
-                status=""
-                year=""
-                author=""
-                copyright=""
-                name=""
-                synopsis=""/>
+                pic="https://mangayabu.top/capas/haikyuu-manga.jpg"
+                status="Completo"
+                year="-"
+                author="-"
+                copyright="https://mangayabu.top/manga/haikyuu/"
+                name="Haikyuu!!"
+                synopsis="O estudante do ensino médio Shōyō Hinata se apega 
+                ao voleibol depois de ver um jogo do campeonato 
+                nacional na televisão. Embora não seja muito alto, 
+                ele se determina a seguir os passos do ídolo do 
+                campeonato, apelidado de Pequeno Gigante, depois 
+                de ver seus jogos. Ele cria um clube de voleibol e 
+                começa a praticar sozinho."/>
             </View>
 
             

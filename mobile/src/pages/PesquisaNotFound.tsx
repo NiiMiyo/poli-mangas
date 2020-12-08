@@ -3,7 +3,7 @@ import { StyleSheet, TextInput, Text, View, TouchableOpacity, Image, Platform, S
 import { useNavigation } from '@react-navigation/native';
 
 import { ArrowLeftCircle } from 'react-feather';
-import notFound from '../images/not-found.svg';
+import notFound from '../images/not-found@3x.png';
 
 import BottomBar from '../components/BottomBar';
 
@@ -42,7 +42,7 @@ export default function PesquisaNotFound() {
                 source={notFound}>
                 </Image>
 
-            <View style={{top:180, alignItems:'baseline', paddingLeft: 50}}>
+            <View style={{top:180, alignItems:'baseline', paddingLeft: 50, width:220, height:216,}}>
                 <Text style={styles.h1}>
                 Opa, parece que não temos 
                 o que você buscou. 
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
         
         paddingLeft:70,
         color: '#FFFFFF',
-        fontWeight: '700',
+        fontFamily: 'Ruda_700Bold',
         textAlign:'center',
         fontSize: 15
     },
