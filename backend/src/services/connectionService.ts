@@ -10,7 +10,6 @@ import connectionHandler, {
 } from "../server/connectionHandler";
 
 import Connector from "../connectors/connector";
-import Manga from "../connectors/manga";
 
 import ConnectorViews from "../views/ConnectorViews";
 import MangaViews, { MangaView } from "../views/MangaViews";

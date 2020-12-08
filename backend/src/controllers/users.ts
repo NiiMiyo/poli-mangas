@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 
 import UserModel from "../database/models/user";
 import UserViews from "../views/UserViews";
-import { userCreated } from "../server/routes/responses";
+import { userCreated, userPatched } from "../server/routes/responses";
 
 import UserService from "../services/userService";
 import fs from "fs";
@@ -58,5 +58,38 @@ export default {
 		user = user as UserModel;
 
 		return userCreated(response, user);
+	},
+
+	async patch(request: Request, response: Response) {
+		const { id, password, email, new_password } = request.body;
+		const new_profile_picture = request.file;
+
+		const patchedUser = {
+			id,
+			password,
+			email,
+			new_password,
+			new_profile_picture,
+		};
+
+		let { ok, conflicts, user } = await UserService.patch(
+			patchedUser
+		);
+
+		if (!ok) {
+			if (new_profile_picture !== undefined) {
+				fs.unlink(new_profile_picture.path, () => {});
+			}
+
+			return response.status(400).json({
+				message: "Invalid login",
+				conflicts,
+				statusCode: 400,
+			});
+		}
+
+		user = user as UserModel;
+
+		return userPatched(response, user);
 	},
 };
