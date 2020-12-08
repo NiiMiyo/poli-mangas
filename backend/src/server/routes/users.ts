@@ -19,10 +19,4 @@ routes.post(
 	UserController.create
 );
 
-routes.patch(
-	routePrefix,
-	upload.single("new_profile_picture"),
-	UserController.patch
-);
-
 export default routes;

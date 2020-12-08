@@ -27,7 +27,7 @@ app.use(
 app.use(
 	"/favicon.ico",
 	express.static(path.join(__dirname, "..", "..", "favicon.ico"))
-);
+)
 
 app.use(errorHandler);
 

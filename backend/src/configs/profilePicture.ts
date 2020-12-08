@@ -32,14 +32,10 @@ const options: Options = {
 	storage: multer.diskStorage({
 		destination: paths.get(env),
 		filename: (request, file, cb) => {
-			const { id } = request.body;
+			const { id: username } = request.body;
+			const extension = file.originalname.split(".").pop();
 
-			const ext = file.originalname.split(".").pop();
-			const extension = ext !== undefined ? `.${ext}` : "";
-
-			const timestamp = Date.now();
-
-			const filename = `${timestamp}-${id}${extension}`;
+			const filename = `${username}.${extension}`;
 
 			cb(null, filename);
 		},

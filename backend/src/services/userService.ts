@@ -5,7 +5,7 @@ import * as yup from "yup";
 import UserModel from "../database/models/user";
 import Hash from "../crypto/hash";
 
-import { UserTypes, UserServiceResponses } from "./servicetypes";
+import { UserTypes } from "./servicetypes";
 
 export default abstract class UserService {
 	static async getAllUsers(): Promise<UserModel[]> {
@@ -25,7 +25,7 @@ export default abstract class UserService {
 
 	static async registerUser(
 		userData: UserTypes.SignUpData
-	): Promise<UserServiceResponses.Register> {
+	): Promise<UserTypes.RegisterReponse> {
 		const db = await connection;
 
 		if (userData.id !== undefined) {
@@ -102,68 +102,5 @@ export default abstract class UserService {
 		}
 
 		return conflicts;
-	}
-
-	private static async validateLogin(
-		user: UserTypes.LoginData
-	): Promise<boolean> {
-		user.password = Hash.hash(user.password);
-
-		const toSearch = {
-			id: user.id,
-			password: user.password,
-		};
-
-		const db = await connection;
-		const userRepo = db.getRepository(UserModel);
-
-		const dbUser = await userRepo.findOne(toSearch);
-		return dbUser !== undefined;
-	}
-
-	static async patch(
-		patchData: UserTypes.PatchRequest
-	): Promise<UserServiceResponses.Patch> {
-		const isValidLogin = await this.validateLogin(patchData);
-		if (!isValidLogin)
-			return {
-				ok: false,
-				conflicts: [
-					"Username and Password don't match",
-				],
-			};
-
-		const db = await connection;
-		const userRepo = db.getRepository(UserModel);
-
-		const toSearch = {
-			id: patchData.id,
-			password: patchData.password,
-		};
-		const user = await userRepo.findOneOrFail(toSearch);
-
-		if (patchData.new_profile_picture !== undefined) {
-			user.profile_picture =
-				patchData.new_profile_picture.filename;
-		}
-
-		if (patchData.new_password !== undefined) {
-			patchData.new_password = Hash.hash(
-				patchData.new_password
-			);
-
-			user.password = patchData.new_password;
-		}
-
-		if (patchData.new_email !== undefined) {
-			user.email = patchData.new_email;
-		}
-
-		await userRepo.save(user);
-		return {
-			ok: true,
-			conflicts: [],
-			user,
-		};
 	}
 }

@@ -3,47 +3,35 @@ import { Response } from "express";
 import UserModel from "../../database/models/user";
 import UserViews from "../../views/UserViews";
 
-const ResponseCodes = {
-	NOT_FOUND: 404,
-	CREATED: 201,
-	OKAY: 200,
-};
+const notFoundCode = 404;
+const createdCode = 201;
 
 export function connectorNotFound(response: Response): Response {
-	const res = response.status(ResponseCodes.NOT_FOUND).json({
+	const res = response.status(notFoundCode).json({
 		message: "Connector not found",
-		statusCode: ResponseCodes.NOT_FOUND,
+		statusCode: notFoundCode,
 	});
 	return res;
 }
 
 export function mangaNotFound(response: Response): Response {
-	return response.status(ResponseCodes.NOT_FOUND).json({
+	return response.status(notFoundCode).json({
 		message: "Manga not found",
-		statusCode: ResponseCodes.NOT_FOUND,
+		statusCode: notFoundCode,
 	});
 }
 
 export function chapterNotFound(response: Response): Response {
-	return response.status(ResponseCodes.NOT_FOUND).json({
+	return response.status(notFoundCode).json({
 		message: "Chapter not found",
-		statusCode: ResponseCodes.NOT_FOUND,
+		statusCode: notFoundCode,
 	});
 }
 
 export function userCreated(response: Response, user: UserModel): Response {
-	const res = response.status(ResponseCodes.CREATED).json({
+	const res = response.status(createdCode).json({
 		message: "User created succesfully",
-		statusCode: ResponseCodes.CREATED,
-		user: UserViews.render(user),
-	});
-	return res;
-}
-
-export function userPatched(response: Response, user: UserModel): Response {
-	const res = response.status(ResponseCodes.OKAY).json({
-		message: "User patched successfully",
-		statusCode: ResponseCodes.OKAY,
+		statusCode: createdCode,
 		user: UserViews.render(user),
 	});
 	return res;
