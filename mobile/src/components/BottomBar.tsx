@@ -44,7 +44,7 @@ export default function BottomBar({ page }: BottomBarProps) {
                     <View style={styles.bottomBar}></View>
 
                     <View style={styles.iconsBar}>
-                        <TouchableOpacity onPress={() => { }}>
+                        <TouchableOpacity onPress={() => {}}>
                             <Image
                                 style={styles.libraryIcon}
                                 source={libraryIconV2}>
@@ -77,13 +77,6 @@ export default function BottomBar({ page }: BottomBarProps) {
 
                     <View style={styles.iconsBar}>
 
-                        <TouchableOpacity onPress={routeToHome}>
-                            <Image
-                                style={styles.homeIcon}
-                                source={homeIconV1}>
-                            </Image>
-                        </TouchableOpacity>
-
                         <TouchableOpacity onPress={routeToLibrary}>
                             <Image
                                 style={styles.libraryIcon}
@@ -91,7 +84,14 @@ export default function BottomBar({ page }: BottomBarProps) {
                             </Image>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => { }}>
+                        <TouchableOpacity onPress={routeToHome}>
+                            <Image
+                                style={styles.homeIcon}
+                                source={homeIconV1}>
+                            </Image>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity onPress={() => {}}>
                             <Image
                                 style={styles.categoriesIcon}
                                 source={categoriesIconV2}>
@@ -118,12 +118,12 @@ export default function BottomBar({ page }: BottomBarProps) {
                             </Image>
                         </TouchableOpacity>
 
-                        <TouchableOpacity onPress={() => { }}>
+                        <TouchableOpacity onPress={() => {}}>
                             <Image
                                 style={styles.homeIcon}
                                 source={homeIconV2}>
                             </Image>
-                        </TouchableOpacity>)
+                        </TouchableOpacity>
 
                     <TouchableOpacity onPress={routeToCategories}>
                             <Image
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
 
     bottomBar: {
         position: 'absolute',
-        top: 667,
+        top: 172,
 
         width: 375,
         height: 54,
@@ -195,21 +195,24 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
 
-        paddingLeft: 100,
-        paddingRight: -100,
-        top: 618
+        // paddingLeft: 100,
+        // paddingRight: -90,
+        top: 185
     },
 
     libraryIcon: {
         height: 24,
         width: 22,
+        marginLeft: 65
     },
     homeIcon: {
         height: 26,
         width: 26,
+        marginLeft: 80
     },
     categoriesIcon: {
         height: 17,
         width: 31.17,
+        marginLeft: 90
     },
 })

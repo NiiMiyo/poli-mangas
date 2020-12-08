@@ -84,8 +84,8 @@ export default function Inicio() {
                 </TouchableOpacity>
             </View>
 
-            <View style={{ flexDirection: 'column' }}>
-                <View style={{top: 105, flexDirection: 'row'}}>
+            <View style={{flexDirection: 'column' }}>
+                <View style={{width: 349, height: 27, top: 105, flexDirection: 'row'}}>
                     <Text style={styles.h1}>Adicionados Recentemente</Text>
                     <TouchableOpacity style={styles.buttonVerMais2} onPress={() => { }}>
                         <Text style={styles.verMais}>VER MAIS</Text>
@@ -94,7 +94,7 @@ export default function Inicio() {
             </View>
 
 
-            <View style={{ width: 357, height: 120, flexDirection: 'row', justifyContent: 'space-between', top: 120, left: 9 }}>
+            <View style={{ width: 357, height: 120, flexDirection: 'row', justifyContent: 'space-between', top: 120, marginLeft: 9}}>
                 <TouchableOpacity onPress={() => { }}>
                     <Image
                         style={styles.buttonMangas}
@@ -283,22 +283,10 @@ const styles = StyleSheet.create({
     buttonMangas: {
 
         height: 120,
-        width: 84,
-
-        lineHeight: 20,
+        width: 84,  
 
         borderRadius: 5,
         borderWidth: 2,
         borderColor: '#FFFFFF'
-    },
-
-    barDown: {
-        position: 'absolute',
-        top: 603,
-
-        width: 375,
-        height: 54,
-
-        backgroundColor: '#242323'
     },
 })
