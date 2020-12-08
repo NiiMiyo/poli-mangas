@@ -1,16 +1,16 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 //branco
-import homeIconV1 from '../images/home.svg';
-import categoriesIconV1 from '../images/categories.svg';
-import libraryIconV1 from '../images/library.svg';
+import homeIconV1 from '../images/home-v2@3x.png';
+import categoriesIconV1 from '../images/categories-v2.png';
+import libraryIconV1 from '../images/library-v2.png';
 
 //roxo
-import homeIconV2 from '../images/home-v2.svg';
-import categoriesIconV2 from '../images/categories-v2.svg';
-import libraryIconV2 from '../images/library-v2.svg';
+import homeIconV2 from '../images/home.png';
+import categoriesIconV2 from '../images/categories.png';
+import libraryIconV2 from '../images/library.png';
 
 interface BottomBarProps {
     page: "Library" | "Home" | "Categories" | "Default";
