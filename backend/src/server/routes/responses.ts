@@ -36,3 +36,12 @@ export function userCreated(response: Response, user: UserModel): Response {
 	});
 	return res;
 }
+
+export function userPatched(response: Response, user: UserModel): Response {
+	const res = response.status(200).json({
+		message: "User patched successfully",
+		statusCode: 200,
+		user: UserViews.render(user),
+	});
+	return res;
+}
