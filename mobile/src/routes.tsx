@@ -14,6 +14,9 @@ import Biblioteca from './pages/Biblioteca';
 
 import Header from './components/Header';
 
+import cadastro from './pages/cadastro';
+
+
 export default function Rotas(){
     return(
         <NavigationContainer>
@@ -44,6 +47,7 @@ export default function Rotas(){
                 }}
                 />
                 
+                <Screen name= "cadastro" component={cadastro} />
             </Navigator>
         </NavigationContainer>
     );
