@@ -19,4 +19,14 @@ routes.post(
 	UserController.create
 );
 
+routes.patch(
+	routePrefix,
+	upload.single("new_profile_picture"),
+	UserController.patch
+);
+
+routes.put(routePrefix + "library", UserController.addFav);
+
+routes.delete(routePrefix + "library", UserController.removeFav);
+
 export default routes;
