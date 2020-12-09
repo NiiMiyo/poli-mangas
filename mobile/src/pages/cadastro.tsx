@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import { AppLoading } from 'expo'
 import {StyleSheet, Text, View, Image, SafeAreaView, Platform, StatusBar, Dimensions, Button, TextInput} from 'react-native';
 import { useDimensions, useDeviceOrientation } from '@react-native-community/hooks'
+import {useNavigation} from '@react-navigation/native';
 import {useFonts,
     Ruda_900Black,
     Ruda_700Bold,
@@ -19,6 +20,11 @@ import {useFonts,
     const iconUser = require('../icons/iconUser.svg');
     const iconEmail = require('../icons/iconEmail.svg');
     const iconPass = require ('../icons/cadeado.svg');
+
+    const navigationHome = useNavigation()
+    function routeToHome(){
+      navigationHome.navigation('inicio')
+    }
 
     let [fontsLoaded] = useFonts({
         Ruda_900Black,
@@ -74,7 +80,7 @@ import {useFonts,
           <Button
           color = "#242323"
           title = "Login"
-          onPress = {()=>console.log("Button Tapped")}
+          onPress = {routeToHome}
           >
           </Button>
         </View>
