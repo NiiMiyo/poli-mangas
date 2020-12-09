@@ -6,6 +6,7 @@ import {
 	addedFavorite,
 	userCreated,
 	userPatched,
+	removedFavorite,
 } from "../server/routes/responses";
 
 import UserService from "../services/userService";
@@ -121,5 +122,28 @@ export default {
 		}
 
 		return addedFavorite(response);
+	},
+
+	async removeFav(request: Request, response: Response) {
+		let { id, password, connectorId, mangaId } = request.body;
+
+		id = "" + id;
+		password = "" + password;
+
+		const favoriteData = { id, password, connectorId, mangaId };
+
+		const { ok, conflicts } = await UserService.removeFavorite(
+			favoriteData
+		);
+
+		if (!ok) {
+			return response.status(400).json({
+				message: "Favorite not removed",
+				conflicts,
+				statusCode: 400,
+			});
+		}
+
+		return removedFavorite(response);
 	},
 };

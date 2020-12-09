@@ -56,3 +56,11 @@ export function addedFavorite(response: Response): Response {
 	});
 	return res;
 }
+
+export function removedFavorite(response: Response): Response {
+	const res = response.status(ResponseCodes.OKAY).json({
+		message: "Favorite removed successfully",
+		statusCode: ResponseCodes.OKAY,
+	});
+	return res;
+}

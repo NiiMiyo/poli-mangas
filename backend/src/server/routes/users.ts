@@ -27,4 +27,6 @@ routes.patch(
 
 routes.put(routePrefix + "library", UserController.addFav);
 
+routes.delete(routePrefix + "library", UserController.removeFav);
+
 export default routes;

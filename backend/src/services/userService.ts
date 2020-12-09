@@ -228,4 +228,51 @@ export default abstract class UserService {
 			conflicts: "",
 		};
 	}
+
+	static async removeFavorite(
+		favoriteData: LibraryTypes.PatchFavoriteRequest
+	): Promise<LibraryTypes.PatchFavoriteResponse> {
+		const isValid = await this.validateLogin({
+			id: favoriteData.id,
+			password: favoriteData.password,
+		});
+
+		if (!isValid) {
+			return {
+				ok: false,
+				conflicts: "Username and Password don't match",
+			};
+		}
+
+		const hasConnector = favoriteData.connectorId !== undefined;
+		const hasManga = favoriteData.mangaId !== undefined;
+
+		if (!hasConnector || !hasManga) {
+			return {
+				ok: false,
+				conflicts: "Connector or Manga not informed",
+			};
+		}
+
+		const userRepo = (await connection).getRepository(UserModel);
+
+		const user = await userRepo.findOneOrFail({
+			id: favoriteData.id,
+		});
+
+		user.favorites = user.favorites.filter((f) => {
+			const sameManga = favoriteData.mangaId == f.mangaId;
+			const sameConnector =
+				favoriteData.connectorId == f.connectorId;
+
+			return !(sameManga && sameConnector);
+		});
+
+		await userRepo.save(user);
+
+		return {
+			ok: true,
+			conflicts: "",
+		};
+	}
 }
