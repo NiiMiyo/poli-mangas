@@ -2,7 +2,11 @@ import { Request, Response } from "express";
 
 import UserModel from "../database/models/user";
 import UserViews from "../views/UserViews";
-import { userCreated, userPatched } from "../server/routes/responses";
+import {
+	addedFavorite,
+	userCreated,
+	userPatched,
+} from "../server/routes/responses";
 
 import UserService from "../services/userService";
 import fs from "fs";
@@ -34,6 +38,9 @@ export default {
 
 	async create(request: Request, response: Response) {
 		let { id, password, email } = request.body;
+
+		id = "" + id;
+		password = "" + password;
 
 		const profile_picture = request.file;
 		const requestUser = {
@@ -91,5 +98,28 @@ export default {
 		user = user as UserModel;
 
 		return userPatched(response, user);
+	},
+
+	async addFav(request: Request, response: Response) {
+		let { id, password, connectorId, mangaId } = request.body;
+
+		id = "" + id;
+		password = "" + password;
+
+		const favoriteData = { id, password, connectorId, mangaId };
+
+		const { ok, conflicts } = await UserService.addFavorite(
+			favoriteData
+		);
+
+		if (!ok) {
+			return response.status(400).json({
+				message: "Favorite not added",
+				conflicts,
+				statusCode: 400,
+			});
+		}
+
+		return addedFavorite(response);
 	},
 };

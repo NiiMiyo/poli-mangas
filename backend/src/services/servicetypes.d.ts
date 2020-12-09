@@ -33,7 +33,22 @@ export namespace UserServiceResponses {
 
 	type Patch = {
 		ok: boolean;
-		conflicts: string[];
+		conflicts: string;
 		user?: User;
+	};
+}
+
+export namespace LibraryTypes {
+	type PatchFavoriteRequest = {
+		id: string;
+		password: string;
+
+		connectorId: string;
+		mangaId: string;
+	};
+
+	type PatchFavoriteResponse = {
+		ok: boolean;
+		conflicts: string;
 	};
 }

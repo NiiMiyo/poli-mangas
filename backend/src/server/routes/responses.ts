@@ -48,3 +48,11 @@ export function userPatched(response: Response, user: UserModel): Response {
 	});
 	return res;
 }
+
+export function addedFavorite(response: Response): Response {
+	const res = response.status(ResponseCodes.OKAY).json({
+		message: "Favorite added",
+		statusCode: ResponseCodes.OKAY,
+	});
+	return res;
+}

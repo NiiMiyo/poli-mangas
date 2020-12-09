@@ -5,7 +5,8 @@ import * as yup from "yup";
 import UserModel from "../database/models/user";
 import Hash from "../crypto/hash";
 
-import { UserTypes, UserServiceResponses } from "./servicetypes";
+import { UserTypes, UserServiceResponses, LibraryTypes } from "./servicetypes";
+import Favorite from "../database/favorite";
 
 export default abstract class UserService {
 	static async getAllUsers(): Promise<UserModel[]> {
@@ -52,7 +53,7 @@ export default abstract class UserService {
 			email: userData.email,
 			favorites: [],
 			library: "[]",
-			password: userData.password,
+			password: Hash.hash(userData.password),
 			profile_picture: picturePath,
 		};
 
@@ -107,7 +108,7 @@ export default abstract class UserService {
 	private static async validateLogin(
 		user: UserTypes.LoginData
 	): Promise<boolean> {
-		user.password = Hash.hash(user.password);
+		user.password = Hash.hash(`${user.password}`);
 
 		const toSearch = {
 			id: user.id,
@@ -128,9 +129,7 @@ export default abstract class UserService {
 		if (!isValidLogin)
 			return {
 				ok: false,
-				conflicts: [
-					"Username and Password don't match",
-				],
+				conflicts: "Username and Password don't match",
 			};
 
 		const db = await connection;
@@ -162,8 +161,71 @@ export default abstract class UserService {
 		await userRepo.save(user);
 		return {
 			ok: true,
-			conflicts: [],
+			conflicts: "",
 			user,
+		};
+	}
+
+	static async addFavorite(
+		favoriteData: LibraryTypes.PatchFavoriteRequest
+	): Promise<LibraryTypes.PatchFavoriteResponse> {
+		const isValid = await this.validateLogin(favoriteData);
+
+		if (!isValid) {
+			return {
+				ok: false,
+				conflicts: "Username and Password don't match",
+			};
+		}
+
+		const hasConnector = favoriteData.connectorId !== undefined;
+		const hasManga = favoriteData.mangaId !== undefined;
+
+		if (!hasConnector || !hasManga) {
+			return {
+				ok: false,
+				conflicts: "Connector or Manga not informed",
+			};
+		}
+
+		const userRepo = (await connection).getRepository(UserModel);
+
+		const user = await userRepo.findOneOrFail({
+			id: favoriteData.id,
+		});
+
+		const thisFavorite = new Favorite(
+			favoriteData.connectorId,
+			favoriteData.mangaId
+		);
+
+		const favorites = [...user.favorites];
+
+		let alreadyFavorite = false;
+		for (let i = 0; i < favorites.length; i++) {
+			const f = favorites[i];
+
+			const equalConnector =
+				f.connectorId == favoriteData.connectorId;
+
+			const equalManga = f.mangaId == favoriteData.mangaId;
+
+			if (equalConnector && equalManga) {
+				alreadyFavorite = true;
+				break;
+			}
+		}
+
+		if (!alreadyFavorite) {
+			favorites.push(thisFavorite);
+			user.favorites = [...favorites];
+
+			await userRepo.save(user);
+		}
+
+		return {
+			ok: true,
+			conflicts: "",
 		};
 	}
 }
