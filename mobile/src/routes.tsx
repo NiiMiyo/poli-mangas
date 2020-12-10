@@ -11,6 +11,7 @@ import Menu from './pages/Menu';
 import Categorias from './pages/Categorias';
 import CategoriasMenu from './pages/CategoriasMenu';
 import Biblioteca from './pages/Biblioteca';
+import Cadastro from './pages/Cadastro';
 
 import Header from './components/Header';
 
@@ -26,6 +27,8 @@ export default function Rotas(){
                 <Screen name= "Inicio" component={Inicio} />
 
                 <Screen name= "Menu" component={Menu} />
+
+                <Screen name= "Cadastro" component={Cadastro} />
 
                 <Screen 
                 name= "Categorias" 

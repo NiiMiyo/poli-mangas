@@ -18,6 +18,12 @@ export default function Login() {
     navigationHome.navigate('Inicio')
   }
 
+  const navigationSignUp = useNavigation()
+
+  function routeToSignUp() {
+    navigationSignUp.navigate('Cadastro')
+  }
+
     const emailAttribute = email;
     const passwordAttribute = password;
 
@@ -76,7 +82,7 @@ export default function Login() {
         <Text style={styles.textSignUp}>Ainda não tem uma conta?</Text>
       </View>
 
-      <TouchableOpacity style={styles.button2} onPress={() => { }}>
+      <TouchableOpacity style={styles.button2} onPress={routeToSignUp}>
         <Text style={styles.signUp}>CADASTRE-SE</Text>
       </TouchableOpacity>
 
