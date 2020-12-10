@@ -11,7 +11,8 @@ import Menu from './pages/Menu';
 import Categorias from './pages/Categorias';
 import CategoriasMenu from './pages/CategoriasMenu';
 import Biblioteca from './pages/Biblioteca';
-import Cadastro from './pages/Cadastro';
+import Sinopses from './pages/Sinopses';
+import PesquisaNotFound from './pages/PesquisaNotFound'
 
 import Header from './components/Header';
 
@@ -28,7 +29,7 @@ export default function Rotas(){
 
                 <Screen name= "Menu" component={Menu} />
 
-                <Screen name= "Cadastro" component={Cadastro} />
+                <Screen name= "PesquisaNotFound" component={PesquisaNotFound} />
 
                 <Screen 
                 name= "Categorias" 
@@ -39,7 +40,13 @@ export default function Rotas(){
                 }}
                 />
 
-                <Screen name= "CategoriasMenu" component={CategoriasMenu} />
+                <Screen 
+                name= "CategoriasMenu" 
+                component={CategoriasMenu}
+                options={{
+                    headerShown:true,
+                    header: () => <Header title="ESPORTES" />
+                }} />
 
                 <Screen 
                 name= "Biblioteca" 
@@ -49,6 +56,19 @@ export default function Rotas(){
                     header: () => <Header title="BIBLIOTECA" />
                 }}
                 />
+
+                <Screen 
+                name= "Sinopses" 
+                component={Sinopses} 
+                options={{
+                    headerShown:true,
+                    header: () => <Header title="HAIKYUU" />
+                }}
+                />
+
+
+
+
                 
                 <Screen name= "cadastro" component={cadastro} />
             </Navigator>

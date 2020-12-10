@@ -16,7 +16,7 @@ export default function Inicio() {
 
     const navigationSearch = useNavigation()
 
-    function routeToSearch(){
+    function routeToSearchNotFound() {
         navigationSearch.navigate('PesquisaNotFound')
     }
 
@@ -42,7 +42,7 @@ export default function Inicio() {
                         </Image>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.lupaIcon} onPress={routeToSearch}>
+                    <TouchableOpacity style={styles.lupaIcon} onPress={routeToSearchNotFound}>
                         <Search name="search" size={20} color="#FFFFFF" />
                     </TouchableOpacity>
 
