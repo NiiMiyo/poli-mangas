@@ -58,7 +58,7 @@ export default function Menu() {
         <SafeAreaView style={styles.container}>
 
             <View style={styles.background1}>
-                <Text style={styles.user}>Anne JojoFag</Text>
+                <Text style={styles.user}>Anne</Text>
             </View>
 
             <View style={styles.profile}>

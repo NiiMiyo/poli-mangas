@@ -23,7 +23,7 @@ import {useFonts,
 
     const navigationHome = useNavigation()
     function routeToHome(){
-      navigationHome.navigation('inicio')
+      navigationHome.navigate('Login')
     }
 
     let [fontsLoaded] = useFonts({
@@ -71,7 +71,7 @@ import {useFonts,
           <Button
           color = "#242323"
           title = "Cadastrar"
-          onPress = {()=>console.log("Button Tapped")}
+          onPress = {routeToHome}
           >
           </Button>
         </View>
