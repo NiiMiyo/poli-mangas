@@ -38,7 +38,10 @@ export default {
 	},
 
 	async create(request: Request, response: Response) {
-		let { id, password, email } = request.body;
+		const { id, password, email } = request.body;
+
+		// if (id !== undefined) id = "" + id;
+		// if (password !== undefined) password = "" + password;
 
 		id = "" + id;
 		password = "" + password;
@@ -58,7 +61,7 @@ export default {
 		if (!ok) {
 			fs.unlink(profile_picture.path, () => {});
 			return response.status(409).json({
-				message: "Conflic error",
+				message: "Conflict error",
 				conflicts,
 				statusCode: 409,
 			});

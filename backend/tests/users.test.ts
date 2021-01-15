@@ -8,20 +8,31 @@ import supertest from "supertest";
 
 describe("User sign-up", () => {
 	beforeAll(async () => {
-		return new Promise(async (resolve) => {
+		return new Promise<void>(async (resolve) => {
 			await connection;
 			resolve();
 		});
 	});
 
 	beforeEach(async () => {
-		return new Promise(async (resolve) => {
+		return new Promise<void>(async (resolve) => {
+			// Waiting connection with DB
 			const c = await connection;
 			await c.undoLastMigration();
 			await c.runMigrations({ transaction: "all" });
 
+			// Mocking Date.now()
+			jest.spyOn(global.Date, "now").mockReturnValue(
+				12345678
+			);
+
 			resolve();
 		});
+	});
+
+	afterEach(() => {
+		// Restoring Date.now()
+		jest.spyOn(global.Date, "now").mockRestore();
 	});
 
 	test("Correct User sign-up", async (done) => {
@@ -40,14 +51,14 @@ describe("User sign-up", () => {
 			);
 
 		const expectedResponse = {
-			message: "User created succesfully",
+			message: "User created successfully",
 			statusCode: 201,
 			user: {
 				id: "foo",
 				email: "foo@example.com",
 				favorites: [],
 				profile_picture:
-					"http://localhost:3333/uploads/profilePictures/foo.jpg",
+					"http://localhost:3333/uploads/profilePictures/12345678-foo.jpg",
 			},
 		};
 
@@ -157,7 +168,7 @@ describe("User sign-up", () => {
 		const jsonResponse = JSON.parse(response.text);
 
 		const expectedResponse = {
-			message: "User created succesfully",
+			message: "User created successfully",
 			statusCode: 201,
 			user: {
 				id: "foo",
@@ -171,4 +182,7 @@ describe("User sign-up", () => {
 		expect(jsonResponse).toEqual(expectedResponse);
 		done();
 	});
+
+	// TODO: User sign-up with ID already in use
+	// TODO: User sign-up with email already in use
 });

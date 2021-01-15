@@ -67,7 +67,7 @@ export async function fetchDom(url: string) {
  *
  * @param comparators Os valores a serem comparados
  * @returns Uma `boolean` de acordo com os
- * valores booleandos dos `comparators`
+ * valores booleanos dos `comparators`
  */
 export function multipleAnd(...comparators: any[]): boolean {
 	for (let i = 0; i < comparators.length; i++) {
@@ -84,7 +84,7 @@ export function multipleAnd(...comparators: any[]): boolean {
  *
  * @param comparators Os valores a serem comparados
  * @returns Uma `boolean` de acordo com os
- * valores booleandos dos `comparators`
+ * valores booleanos dos `comparators`
  */
 export function multipleOr(...comparators: any[]): boolean {
 	for (let i = 0; i < comparators.length; i++) {
@@ -221,4 +221,8 @@ function escapeCharacters(query: string): string {
 	});
 
 	return query;
+}
+
+export function isEmptyString(str: string): boolean {
+	return [null, undefined, ""].includes(str);
 }
