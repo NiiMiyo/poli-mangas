@@ -59,7 +59,7 @@ export default abstract class UserService {
 			email: userData.email,
 			favorites: [],
 			library: "[]",
-			password: userData.password,
+			password: Hash.hash(userData.password),
 			profile_picture: picturePath,
 		};
 

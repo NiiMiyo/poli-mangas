@@ -43,6 +43,9 @@ export default {
 		// if (id !== undefined) id = "" + id;
 		// if (password !== undefined) password = "" + password;
 
+		id = "" + id;
+		password = "" + password;
+
 		const profile_picture = request.file;
 		const requestUser = {
 			id,
