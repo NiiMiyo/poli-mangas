@@ -33,7 +33,7 @@ export function chapterNotFound(response: Response): Response {
 
 export function userCreated(response: Response, user: UserModel): Response {
 	const res = response.status(ResponseCodes.CREATED).json({
-		message: "User created succesfully",
+		message: "User created successfully",
 		statusCode: ResponseCodes.CREATED,
 		user: UserViews.render(user),
 	});

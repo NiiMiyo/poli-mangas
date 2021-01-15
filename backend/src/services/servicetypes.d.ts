@@ -22,6 +22,13 @@ export namespace UserTypes {
 		id: string;
 		password: string;
 	};
+
+	type ValidationScheme = {
+		id: string | undefined;
+		password: string | undefined;
+		email: string | undefined;
+		profile_picture: string;
+	};
 }
 
 export namespace UserServiceResponses {

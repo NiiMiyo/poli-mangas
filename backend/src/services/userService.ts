@@ -7,6 +7,7 @@ import Hash from "../crypto/hash";
 
 import { UserTypes, UserServiceResponses, LibraryTypes } from "./servicetypes";
 import Favorite from "../database/favorite";
+import { isEmptyString } from "../generics";
 
 export default abstract class UserService {
 	static async getAllUsers(): Promise<UserModel[]> {
@@ -29,31 +30,36 @@ export default abstract class UserService {
 	): Promise<UserServiceResponses.Register> {
 		const db = await connection;
 
-		if (userData.id !== undefined) {
+		if (!isEmptyString(userData.id)) {
 			userData.id = userData.id.trim();
-		} else {
-			userData.id = "";
 		}
 
-		if (userData.email !== undefined) {
+		if (!isEmptyString(userData.password)) {
+			userData.password = Hash.hash(userData.password);
+		}
+
+		if (!isEmptyString(userData.email)) {
 			userData.email = userData.email.trim();
-		} else {
-			userData.email = "";
 		}
 
-		let picturePath;
+		/* let picturePath;
 		if (userData.profile_picture !== undefined) {
 			picturePath = userData.profile_picture.filename;
 		} else {
 			picturePath = "undefined";
-		}
+		} */
+
+		const picturePath =
+			userData.profile_picture !== undefined
+				? userData.profile_picture.filename
+				: "undefined";
 
 		const storedUser: UserModel = {
 			id: userData.id,
 			email: userData.email,
 			favorites: [],
 			library: "[]",
-			password: Hash.hash(userData.password),
+			password: userData.password,
 			profile_picture: picturePath,
 		};
 
@@ -76,15 +82,17 @@ export default abstract class UserService {
 		};
 	}
 
-	private static async validateUser(user: UserModel): Promise<string[]> {
+	private static async validateUser(
+		user: UserTypes.ValidationScheme
+	): Promise<string[]> {
 		const db = await connection;
 		const userRepo = db.getRepository(UserModel);
 
 		const validationScheme = yup.object().shape({
-			id: yup.string().required(),
-			password: yup.string().required(),
+			id: yup.string().required().min(1),
+			password: yup.string().required().min(1),
 			email: yup.string().email().required(),
-			profile_picture: yup.string(),
+			profile_picture: yup.string().optional(),
 		});
 
 		await validationScheme.validate(user, { abortEarly: false });
